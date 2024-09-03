@@ -25,23 +25,6 @@ fun main() {
     multiplication(b=2,a=4)
 }
 
-class StringValidator {
-
-    fun isValidIdentifier(s: String): Boolean {
-        TODO()
-    }
-
-    fun main(args: Array<String>) {
-        println(isValidIdentifier("name"))   // true
-        println(isValidIdentifier("_name"))  // true
-        println(isValidIdentifier("_12"))    // true
-        println(isValidIdentifier(""))       // false
-        println(isValidIdentifier("012"))    // false
-        println(isValidIdentifier("no$"))    // false
-    }
-
-}
-
 fun isValidIdentifier(s: String): Boolean {
     if(s.length < 1) return false
     val a = s.get(0)
@@ -52,19 +35,6 @@ fun isValidIdentifier(s: String): Boolean {
     return true
 }
 
-fun main(args: Array<String>) {
-    println(isValidIdentifier("name"))   // true
-    println(isValidIdentifier("_name"))  // true
-    println(isValidIdentifier("_12"))    // true
-    println(isValidIdentifier(""))       // false
-    println(isValidIdentifier("012"))    // false
-    println(isValidIdentifier("no$"))    // false
-
-
-
-    println("kotlin" in "Java".."Scala")
-    println("kotlin" in setOf("Java", "Scala"))
-}
 
 
 
