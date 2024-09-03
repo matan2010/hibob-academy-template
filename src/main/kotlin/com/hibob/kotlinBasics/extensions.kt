@@ -16,6 +16,7 @@ fun List<Int>.sum(): Int{
 }
 
 
+
 fun main(args: Array<String>){
     val list = listOf(1,2,3)
     val sum= list.sum()
