@@ -11,7 +11,7 @@ fun main() {
     }
     //function that checks whether two integers are equal or not
     fun isEqual(a: Int ,b:Int):Boolean {
-        if (a == b)  return true  else return false
+        return a == b
     }
     //function as an expression (one line) that prints the max value of two given integers
     fun max(a:Int ,b:Int):Int = if (a > b) a else b
