@@ -1,3 +1,4 @@
+package com.hibob.kotlinBascis
 import java.time.LocalDate
 
 //1. create data class of Cart that include: client Id and list of Products
@@ -19,34 +20,21 @@ import java.time.LocalDate
 class Product(val id: String, val name: String,val price: Double,val custom:Any)
 data class Cart(val clientId: String, val products:List<Product> )
 sealed class Payment(){
-    class CreditCard(val number:String,val expiryDate: LocalDate ,val type:Type,val limit:Double) : Payment()
-    class PayPal(val email:String)
-    class Cash()
+    class CreditCard(val number:String, val expiryDate: LocalDate, val type: CreditCardType, val limit:Double) : Payment()
+    class PayPal(val email:String): Payment()
+    data object Cash : Payment()
 }
 
-enum class Type {
+
+enum class CreditCardType {
     VISA, MASTERCARD, DISCOVER ,AMERICAN_EXPRESS
 }
+data class Check(val employeeId:String, val status: Statuses, val total:Double)
 
-fun fail(message:String):Nothing{
-    throw IllegalStateException(message)
+enum class Statuses(){
+    SUCCESS,FAILURE
 }
 
-fun checkCustom(custom: Any):Boolean{
-     return when(custom){
-         is Boolean-> custom
-         else->false
 
-    }
-}
 
-fun checkout(cart:Cart, payment:Payment){
-    var total:Double = 0.0
-    cart.products.forEach()
-}
 
-data class Check(val employeeId:String,val status: Status,val total:Double)
-
-enum class Status(){
-    Success,Failure
-}
