@@ -1,7 +1,6 @@
 package com.hibob.kotlinBascis
 
-
-abstract class Meeting(val name:String,val location:Location){
+abstract class Meeting(open val name:String, open val location:Location){
     constructor(name: String, location: Location, participants: List<Participant>) : this(name, location) {
     }
 }
@@ -13,7 +12,15 @@ abstract class Location{
 }
 
 class US(override val street: String, override val city: String, override val county: String ,val zipCode:Int, ):Location()
+
 class UK(override val street: String, override val city: String, override val county: String ,val postcode:Int, ):Location()
 
-//class PersonalReview(override val name: String, override val location:Location):Meeting(name,location)
+class Reviewer()
+
+class PersonalReview(override val name:String, val participant:Participant,val reviewer: List<Reviewer>, override val location:Location):Meeting(name, location){
+    init {
+        println("SUCCESS!")
+    }
+}
+
 

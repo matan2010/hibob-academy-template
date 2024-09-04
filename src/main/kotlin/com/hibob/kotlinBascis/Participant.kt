@@ -1,3 +1,3 @@
 package com.hibob.kotlinBascis
 
-data class Participant (val name:String,val email:String)
+data class Participant (var name:String,var email:String)
