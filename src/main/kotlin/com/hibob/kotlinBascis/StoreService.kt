@@ -7,13 +7,9 @@ import java.time.LocalDate
 class StoreService {
 
     fun pay(cart: List<Cart>, payment: Payment): Map<String, Check> {
-        val paymentResult = mutableMapOf<String, Check>()
-        cart.forEach { myCart ->
-            val check = checkout(myCart, payment)
-            val clientId: String = myCart.clientId
-            paymentResult[clientId] = check
+        return cart.associate { myCart ->
+            myCart.clientId to checkout(myCart, payment)
         }
-        return paymentResult
     }
 }
 
