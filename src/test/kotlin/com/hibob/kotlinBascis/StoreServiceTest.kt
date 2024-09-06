@@ -2,14 +2,8 @@ package com.hibob.kotlinBascis
 
 import org.junit.jupiter.api.Assertions.*
 
-//class StoreServiceTest
-
-
-//package com.hibob.academy.types
-
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 import java.time.LocalDate

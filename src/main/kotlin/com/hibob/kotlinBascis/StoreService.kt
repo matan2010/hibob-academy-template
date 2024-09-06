@@ -1,4 +1,5 @@
 package com.hibob.kotlinBascis
+
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -6,19 +7,19 @@ import java.time.LocalDate
 class StoreService {
 
     fun pay(cart: List<Cart>, payment: Payment): Map<String, Check> {
-        val ans = mutableMapOf<String, Check>()
-        cart.forEach{myCart->
-            val check=checkout(myCart, payment)
-            val clientId:String=myCart.clientId
-            ans[clientId]=check
+        val paymentResult = mutableMapOf<String, Check>()
+        cart.forEach { myCart ->
+            val check = checkout(myCart, payment)
+            val clientId: String = myCart.clientId
+            paymentResult[clientId] = check
         }
-       return ans
+        return paymentResult
     }
 }
 
 
-fun checkCardType(type: CreditCardType):Boolean{
-    return when(type){
+fun checkCardType(type: CreditCardType): Boolean {
+    return when (type) {
         CreditCardType.MASTERCARD -> true
         CreditCardType.VISA -> true
         CreditCardType.DISCOVER -> false
@@ -27,52 +28,68 @@ fun checkCardType(type: CreditCardType):Boolean{
 }
 
 fun checkPayment(payment: Payment, total: Double): Statuses {
-    return when(payment){
-        is Payment.CreditCard -> creditCardTest(payment,total)
-        is Payment.PayPal-> payPalTest(payment)
+    return when (payment) {
+        is Payment.CreditCard -> creditCardTest(payment, total)
+        is Payment.PayPal -> payPalStatuses(payment)
         is Payment.Cash -> fail("It is not allowed to pay in cash")
     }
 }
 
 fun checkout(cart: Cart, payment: Payment): Check {
-    var total:Double = 0.0
-    cart.products.forEach {product ->
-        if(checkCustom(product.custom)){
-            total += product.price
-        }
+    val total = cart.products
+        .filter { product -> checkCustom(product.custom) }
+        .map { product -> product.price }
+        .reduce { acc, price -> acc + price }
+
+    val status = checkPayment(payment, total)
+    if (status == Statuses.FAILURE) {
+        return Check(cart.clientId, status, 0.0)
     }
-    val status =checkPayment(payment,total)
-    if(status.equals(Statuses.FAILURE)){
-        total = 0.0
-    }
-    return Check(cart.clientId,status,total)
+    return Check(cart.clientId, status, total)
 }
 
-fun fail(message:String):Nothing{
+fun fail(message: String): Nothing {
     throw IllegalStateException(message)
 }
 
-fun checkCustom(custom: Any):Boolean{
-    return when(custom){
-        is Boolean-> custom
-        else->false
-
-    }
+fun checkCustom(custom: Any): Boolean {
+    return if (custom is Boolean) {
+        custom
+    } else false
 }
 
 fun creditCardTest(payment: Payment.CreditCard, total: Double): Statuses {
-    if(payment.expiryDate> LocalDate.now() &&
-        payment.limit>total &&
-        (payment.number.length==10) &&
-        checkCardType(payment.type)){
-        return Statuses.SUCCESS
-    } else return Statuses.FAILURE
+    return if (isValidatePayment(payment, total)) {
+        Statuses.SUCCESS
+    } else Statuses.FAILURE
 }
-fun payPalTest(payment: Payment.PayPal): Statuses {
-    if (payment.email.contains("@")){
-        return Statuses.SUCCESS
-    } else return Statuses.FAILURE
+
+
+fun isValidatePayment(payment: Payment.CreditCard, total: Double): Boolean {
+    return (isPaymentExpiryDate(payment)
+            && isPaymentWithinLimit(payment, total)
+            && isPaymentNumberValid(payment)
+            && isCardTypeValid(payment))
 }
-fun main() {
-    println("sds")
+
+fun isPaymentExpiryDate(payment: Payment.CreditCard): Boolean {
+    return payment.expiryDate > LocalDate.now()
+}
+
+fun isPaymentWithinLimit(payment: Payment.CreditCard, total: Double): Boolean {
+    return payment.limit > total
+}
+
+fun isPaymentNumberValid(payment: Payment.CreditCard): Boolean {
+    return payment.number.length == 10
+}
+
+fun isCardTypeValid(payment: Payment.CreditCard): Boolean {
+    return checkCardType(payment.type)
+}
+
+fun payPalStatuses(payment: Payment.PayPal): Statuses {
+    return if (payment.email.contains('@')) {
+        Statuses.SUCCESS
+    } else Statuses.FAILURE
 }
