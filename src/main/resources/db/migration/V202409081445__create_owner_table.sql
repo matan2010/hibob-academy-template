@@ -5,8 +5,8 @@ create table owner
     company_id int,
     employee_id int
 );
-CREATE INDEX idx_name_owner_id_employee_id ON owner(owner_id,employee_id);
-
+CREATE INDEX idx_name_owner ON owner(owner_id);
+CREATE INDEX idx_name_employee_id ON owner(employee_id);
 /*INSERT INTO pets ( name, type, company_id, date_of_arrival) VALUES
 ('Buddy', 'Dog', 101, '2023-01-15'),
 ('Mittens', 'Cat', 102, '2022-06-20'),
