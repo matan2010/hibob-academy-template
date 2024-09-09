@@ -1,5 +1,7 @@
 package com.hibob.academy.service
 import com.hibob.academy.resource.AuthenticationResource
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
 //import com.hibob.academy.resource.User
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -24,4 +26,5 @@ class SessionService {
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.toByteArray()), SignatureAlgorithm.HS256)
             .compact()
     }
+
 }

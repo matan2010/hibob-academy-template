@@ -3,6 +3,10 @@ import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.core.Response
 import com.hibob.academy.service.SessionService
+import com.hibob.academy.service.SessionService.Companion.SECRET_KEY
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.Jwts
 import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
@@ -38,4 +42,13 @@ class AuthenticationResource(private val sessionService: SessionService) {
         return sessionService.creatJwrToken(user)
     }
     data class User(val email: String, val name: String,val isAdmin: Boolean)
+
+    fun verify(cookie: String?): Jws<Claims>? =
+        cookie?.let {
+            try {
+                Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(it)
+            } catch (ex: Exception) {
+                null
+            }
+        }
 }
