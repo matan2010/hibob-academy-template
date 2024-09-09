@@ -9,9 +9,15 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 val owners = mutableListOf(
-    Owner(1L,"Ron", 101L, 10L),
-    Owner(2L,"Or", 102L, 11L),
-    Owner(3L,"Noam", 103L, 12L)
+    oldOwner(1L,"Ron", 101L, 10L),
+    oldOwner(2L,"Or", 102L, 11L),
+    oldOwner(3L,"Noam", 103L, 12L)
+)
+
+val newOwners = mutableListOf(
+    Owner(1L,"Matan", "Sabag",101L, 10L),
+    Owner(2L,"Or", "Tamir",102L, 11L),
+    Owner(3L,"Noam", "Gal",103L, 12L)
 )
 
 
@@ -46,16 +52,25 @@ class OwnerResource {
     }
 
     @POST
-    @Path("/addOwner")
-    fun addOwner(newOwner : Owner) : Response {
+    @Path("/addOldOwner")
+    fun addOwner(newOwner : oldOwner) : Response {
         owners.add(newOwner)
         return Response.status(Response.Status.CREATED).entity(newOwner).build()
     }
 
+    @POST
+    @Path("/addOwner")
+    fun addOwner(newOwner : Owner) : Response {
+        newOwners.add(newOwner)
+        return Response.status(Response.Status.CREATED).entity(newOwner).build()
+    }
+
+
+
     //PUT: Update a owner by ownerId
     @PUT
     @Path("/updateOwner/{ownerId}")
-    fun updateOwner(@PathParam("ownerId") ownerId: Long, updatedOwner: Owner): Response {
+    fun updateOwner(@PathParam("ownerId") ownerId: Long, updatedOwner: oldOwner): Response {
         val index = owners.indexOfFirst { it.ownerId == ownerId }
         return if (index>=0){
             owners[index] = updatedOwner.copy(ownerId = ownerId)
