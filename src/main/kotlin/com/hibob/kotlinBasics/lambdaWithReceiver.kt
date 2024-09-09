@@ -50,22 +50,24 @@ class SpidermanNoWayHome() : SpidermanMovieProduceActions {
     override val imdbRank: Double = 9.6
 
     fun prettyPrint(): String = buildString{
-        append("Title: $title Air Date: $airDate IMDB rank: $imdbRank")
+        appendLine("Title: $title")
+        appendLine("Air Date: $airDate")
+        appendLine("IMDB rank: $imdbRank")
     }
     override fun signTobeyMaguire() {
-        //  Tobey signed!
+        println("Tobey signed!")
     }
 
     override fun signAndrew() {
-        //    Andrew signed
+        println("Andrew signed!")
     }
 
     override fun signTom() {
-        //    Tom signed
+        println("Tom signed!")
     }
 
     override fun getVillains() {
-        //   Got villains
+        println("Got villains!")
     }
 
     override fun isThereLockdown(): Boolean = false
