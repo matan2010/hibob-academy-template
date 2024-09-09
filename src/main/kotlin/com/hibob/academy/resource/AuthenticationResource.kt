@@ -38,7 +38,6 @@ class AuthenticationResource(private val sessionService: SessionService) {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun addNewUser(@RequestBody user: User): String {
-        println("sdjfsdhjfgdhsfg")
         return sessionService.creatJwrToken(user)
     }
     data class User(val email: String, val name: String,val isAdmin: Boolean)
