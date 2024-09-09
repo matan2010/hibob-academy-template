@@ -1,12 +1,11 @@
 create table owner
 (
-    owner_id serial primary key,
+    id serial primary key,
     name varchar(100) not null,
     company_id int,
-    employee_id int
+    employee_id varchar(100) not null
 );
-CREATE INDEX idx_name_owner ON owner(owner_id);
-CREATE INDEX idx_name_employee_id ON owner(employee_id);
+CREATE INDEX idx_name_owner_employee ON owner(owner_id, employee_id);
 /*INSERT INTO pets ( name, type, company_id, date_of_arrival) VALUES
 ('Buddy', 'Dog', 101, '2023-01-15'),
 ('Mittens', 'Cat', 102, '2022-06-20'),
