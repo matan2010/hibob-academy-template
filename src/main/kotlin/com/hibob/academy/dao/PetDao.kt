@@ -2,27 +2,26 @@ package com.hibob.academy.dao
 
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
-
+import org.jooq.Record
+import java.sql.Date // If you still need it
+import java.time.LocalDate
 class PetDao(private val sql: DSLContext) {
 
-    private val table = PetTable.instance
+    private val petTable = PetTable.instance
 
-    private val patMapper = RecordMapper<Record, PetTable>
-    { record ->
-        PetTable(
-            record[table.name],
-            record[table.type],
-            record[table.companyId],
-            record[table.dateOfArrival]
+    private val patMapper: RecordMapper<Record, PetData> = RecordMapper { record ->
+        PetData(
+            record.getValue(petTable.name),          // Use getValue for accessing field values
+            record.getValue(petTable.type),          // Use getValue for accessing field values
+            record.getValue(petTable.companyId).toInt(),     // Use getValue for accessing field values
+            record.getValue(petTable.dateOfArrival)?.toLocalDate()// Converts Date to LocalDate
         )
     }
 
-//    fun getCars(): List<PetTable> {
-//        sql.select(c.licensePlate, c.manufacturer)
-//            .from(c)
-//            .where(c.companyId.eq(companyId))
-//            .orderBy(c.manufacturer)
-//            .fetch (carMapper)
+//    fun getPets(): List<PetTable> {
+//        return sql.select()
+//            .from(petTable)
+//            .fetch (patMapper)
 //    }
 
 }
