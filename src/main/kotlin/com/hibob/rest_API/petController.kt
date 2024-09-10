@@ -15,12 +15,12 @@ val pets = mutableListOf(
 
 
 @Controller
-@Path("/api/matan/pets/envelopes")
+@Path("/api/pets/envelopes")
 @Produces(MediaType.APPLICATION_JSON)
 class PetController {
 
     @GET
-    @Path("/getPetType/{petId}")
+    @Path("/{petId}/petType")
     fun getPetType(@PathParam("petId") petId: Long): Response {
         val pet = pets.find { it.petId == petId }
 
@@ -38,13 +38,13 @@ class PetController {
     }
 
     @GET
-    @Path("/getAllPets")
+    @Path("/")
     fun getAllPets(): Response {
         return Response.ok(pets).build()
     }
 
     @POST
-    @Path("/addPet/{newPet}")
+    @Path("/")
     fun addPet(newPet: Pet): Response {
         pets.add(newPet)
         return Response.status(Response.Status.CREATED).entity(newPet).build()
@@ -59,7 +59,7 @@ class PetController {
             pets[index] = updatedPet.copy(petId = petId) // Keep the same pet ID
             Response.ok(updatedPet).build()
         } else {
-            throw NotFoundException("Pet not found")
+            throw NotFoundException("Pet with ID $petId not found")
         }
     }
 
