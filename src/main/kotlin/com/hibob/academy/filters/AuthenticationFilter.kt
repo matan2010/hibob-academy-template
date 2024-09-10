@@ -91,6 +91,7 @@ class AuthenticationFilter : ContainerRequestFilter {
 
         // Verify the JWT token from the cookie
         val cookie = requestContext.cookies
+
         val jwtClaims = verify(cookie["matan_cookie_name"]?.value)
 
         if (jwtClaims == null) {
