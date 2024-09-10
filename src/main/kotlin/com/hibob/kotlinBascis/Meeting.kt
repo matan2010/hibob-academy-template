@@ -1,7 +1,20 @@
 package com.hibob.kotlinBascis
 
-abstract class Meeting(open val name:String, open val location:Location){
-    constructor(name: String, location: Location, participants: List<Participant>) : this(name, location) {
+abstract class Meeting(open val name:String, open val location:Location)
+
+class TeamMeeting(name: String, location: Location, participants: List<Participant>) : Meeting(name, location) {
+    private val participants: MutableList<Participant> = mutableListOf()
+
+    init {
+        this.participants.addAll(participants)
+    }
+
+    fun addParticipant(participant: Participant) {
+        participants.add(participant)
+    }
+
+    fun getParticipants(): List<Participant> {
+        return participants
     }
 }
 
