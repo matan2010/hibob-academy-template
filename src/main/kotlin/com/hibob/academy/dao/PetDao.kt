@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import org.hibernate.validator.constraints.EAN.Type
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -52,5 +53,4 @@ class PetDao(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId))
             .execute()
     }
-
 }
