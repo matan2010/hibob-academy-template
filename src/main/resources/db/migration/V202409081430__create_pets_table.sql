@@ -7,4 +7,3 @@ create table pets
     date_of_arrival date DEFAULT CURRENT_DATE
 );
 
-CREATE INDEX idx_pets_company_id ON pets(company_id);

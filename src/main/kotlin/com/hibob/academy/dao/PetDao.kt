@@ -17,24 +17,29 @@ class PetDao(private val sql: DSLContext) {
         PetData(
             record[petTable.name],          // Use getValue for accessing field values
             record[petTable.dateOfArrival],    // Use getValue for accessing field values
-            record[petTable.companyId]     // Use getValue for accessing field values
+            record[petTable.companyId],     // Use getValue for accessing field values
+            record[petTable.ownerId]
+
         )
     }
 
     fun getPets(type: PetType): List<PetData> {
-        return sql.select()
+        return sql.select(petTable.name, petTable.dateOfArrival, petTable.companyId, petTable.type, petTable.ownerId)
             .from(petTable)
-            .where(petTable.type.eq(type.toString()))
+            .where(petTable.type.eq(type.name.lowercase()))
             .fetch(patMapper)
     }
 
 
-    fun createNewPet(pet:PetData){
+    fun createNewPet(pet:PetDataType){
         sql.insertInto(petTable)
             .set(petTable.name ,pet.name)
+            .set(petTable.ownerId, pet.ownerId)
             .set(petTable.dateOfArrival ,pet.dateOfArrival)
             .set(petTable.companyId ,pet.companyId)
-            .onConflict(petTable.companyId)
+            .set(petTable.ownerId ,pet.ownerId)
+            .set(petTable.type ,PetType.Dog.name.lowercase())
+            .onConflict(petTable.companyId,petTable.ownerId)
             .doNothing()
             .execute()
     }

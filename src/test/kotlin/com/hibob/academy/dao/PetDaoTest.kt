@@ -25,11 +25,18 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     fun `make a new pet`() {
         val name = "Buddy"
         val dateOfArrival = LocalDate.of(2023, 5, 20)
-        val companyId = 123L
-
-        val petTest = PetData(name, dateOfArrival, companyId)
+        val ownerId = 456L
+        val petTest = PetDataType(name, PetType.Dog ,dateOfArrival,companyId,ownerId)
         dao.createNewPet(petTest)
-        assertEquals(1, dao.getPets(PetType.Dog))
+        // Use filter to find matching pets and check if the list is not empty
+        val filteredPets = dao.getPets(PetType.Dog).filter { pet ->
+            pet.name == petTest.name &&
+                    pet.companyId == petTest.companyId &&
+                    pet.dateOfArrival == petTest.dateOfArrival
+        }
+
+// Assert that the filtered list is not empty, meaning the pet exists
+        assertTrue(filteredPets.isNotEmpty(), "Pet Waffle should have been added to the database")
     }
 
 

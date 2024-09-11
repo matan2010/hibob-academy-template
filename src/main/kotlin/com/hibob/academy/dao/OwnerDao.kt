@@ -4,10 +4,6 @@ import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 
-
-
-///make a compani id in  in the begin test
-//and table to the test
 class OwnerDao (private val sql: DSLContext) {
     private val ownerTable = OwnerTable.instance
 
