@@ -14,11 +14,15 @@ import jakarta.ws.rs.ext.Provider
 @Component
 @Provider
 class AuthenticationFilter : ContainerRequestFilter {
+    companion object {
+        private const val LOGIN_PATH = "jwt/users/login"
+        private const val COOKIE_NAME = "matan_name"  // Replace with actual cookie name
+    }
     override fun filter(requestContext: ContainerRequestContext) {
-        if (requestContext.uriInfo.path == "jwt/users/login") return
+        if (requestContext.uriInfo.path == LOGIN_PATH) return
         val cookie = requestContext.cookies
 
-        val jwtClaims = verify(cookie["matan_name"]?.value)
+        val jwtClaims = verify(cookie[COOKIE_NAME]?.value)
 
         if (jwtClaims == null) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Invalid or expired token").build())
@@ -31,7 +35,7 @@ class AuthenticationFilter : ContainerRequestFilter {
             try {
                 jwtParser.parseClaimsJws(it)
             } catch (ex: Exception) {
-                null
+                return null
             }
         }
 }
