@@ -1,9 +1,9 @@
 create table pets
 (
-    id serial primary key,
+    id BIGSERIAL primary key,
     name varchar(100) not null ,
     type varchar(100) not null ,
-    company_id int,
+    company_id BIGINT,
     date_of_arrival date DEFAULT CURRENT_DATE
 );
 
