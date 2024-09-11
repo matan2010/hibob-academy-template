@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 @BobDbTest
 class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
-    private val companyId:Long = 8L
+    private val companyId:Long=8
     private val table=PetTable.instance
     private val dao = PetDao(sql)
 
