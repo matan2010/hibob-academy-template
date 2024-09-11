@@ -12,6 +12,7 @@ import java.time.LocalDate
 @BobDbTest
 class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     private val companyId:Long=8
+    private val ownerId:Long=8
     private val table=PetTable.instance
     private val dao = PetDao(sql)
 
@@ -41,6 +42,8 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
         val petsList = dao.getPetsByType(companyId, PetType.CAT)
         assertEquals(emptyList<PetData>(), petsList)
 
+// Assert that the filtered list is not empty, meaning the pet exists
+        assertTrue(filteredPets.isNotEmpty(), "Pet Waffle should have been added to the database")
     }
 
 
