@@ -1,20 +1,12 @@
 package com.hibob.kotlinBascis
 
-abstract class Meeting(open val name:String, open val location:Location)
-
-class TeamMeeting(name: String, location: Location, participants: List<Participant>) : Meeting(name, location) {
-    private val participants: MutableList<Participant> = mutableListOf()
-
-    init {
-        this.participants.addAll(participants)
-    }
-
+open class Meeting(
+    val name: String,
+    val location: Location
+) {
+    private val participants = mutableListOf<Participant>()
     fun addParticipant(participant: Participant) {
         participants.add(participant)
-    }
-
-    fun getParticipants(): List<Participant> {
-        return participants
     }
 }
 
@@ -28,9 +20,12 @@ class US(override val street: String, override val city: String, override val co
 
 class UK(override val street: String, override val city: String, override val county: String ,val postcode:Int, ):Location()
 
-class Reviewer()
-
-class PersonalReview(override val name:String, val participant:Participant,val reviewer: List<Reviewer>, override val location:Location):Meeting(name, location){
+class PersonalReview(
+    name: String,
+    location: Location,
+    val participant: Participant,
+    val reviewers: List<Participant>,
+) : Meeting(name, location) {
     init {
         println("SUCCESS!")
     }
