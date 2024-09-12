@@ -6,7 +6,6 @@ create table owner
     employee_id varchar(100) not null
 );
 CREATE UNIQUE INDEX idx_owner_id_employee_id ON owner(company_id, employee_id);
-
 /*INSERT INTO pets ( name, type, company_id, date_of_arrival) VALUES
 ('Buddy', 'Dog', 101, '2023-01-15'),
 ('Mittens', 'Cat', 102, '2022-06-20'),
