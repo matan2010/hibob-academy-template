@@ -20,6 +20,8 @@ class AuthenticationFilter : ContainerRequestFilter {
     }
     override fun filter(requestContext: ContainerRequestContext) {
         if (requestContext.uriInfo.path == LOGIN_PATH) return
+
+
         try {
             val cookie = requestContext.cookies
 
