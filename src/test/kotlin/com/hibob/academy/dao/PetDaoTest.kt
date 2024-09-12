@@ -71,5 +71,35 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     }
 
 
+    @Test
+    fun `countPetsByType should return correct counts`() {
+        val pet1 = PetDataType(
+            "Rex",
+            PetType.Dog,
+            LocalDate.of(2024, 9, 11),
+            companyId,
+            ownerId
+        )
+
+        val pet2 = PetDataType(
+            "Whiskers",
+            PetType.Cat,
+            LocalDate.of(2024, 9, 12),
+            companyId,
+            ownerId
+        )
+
+        val pet3 = PetDataType(
+            "Buddy",
+            PetType.Dog,
+            LocalDate.of(2024, 9, 13),
+            companyId,
+            7)
+        dao.createNewPet(pet1)
+        dao.createNewPet(pet2)
+        dao.createNewPet(pet3)
+    }
+
+
 
 }
