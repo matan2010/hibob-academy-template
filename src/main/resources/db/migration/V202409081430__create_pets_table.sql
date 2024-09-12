@@ -7,3 +7,4 @@ create table pets
     date_of_arrival date DEFAULT CURRENT_DATE
 );
 
+
