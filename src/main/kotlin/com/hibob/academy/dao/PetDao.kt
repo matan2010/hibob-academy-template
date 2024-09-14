@@ -50,15 +50,6 @@ class PetDao(private val sql: DSLContext) {
             .execute()
     }
 
-
-//    fun getOwnerByPetId(petId: Long,companyId: Long): OwnerData? {
-//        return sql.select(ownerTable.name, ownerTable.employeeId,ownerTable.companyId)//,ownerTable.id)
-//            .from(ownerTable)
-//            .join(petTable).on(petTable.ownerId.eq(ownerTable.employeeId))
-//            .where(petTable.id.eq(petId),petTable.companyId.eq(companyId))
-//            .fetchOneInto(OwnerData::class.java)
-//    }
-
     fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? {
         return sql.select(
             ownerTable.id,

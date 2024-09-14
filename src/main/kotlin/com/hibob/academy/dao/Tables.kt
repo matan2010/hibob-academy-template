@@ -1,7 +1,7 @@
 package com.hibob.academy.dao
 
 import com.hibob.academy.utils.JooqTable
-import javassist.CtMethod.ConstParameter.integer
+
 
 class OwnerTable(tableName: String = "owner") : JooqTable(tableName){
 

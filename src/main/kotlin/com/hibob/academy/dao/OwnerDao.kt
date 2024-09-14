@@ -5,16 +5,15 @@ import org.jooq.Record
 import org.jooq.RecordMapper
 
 
-
 class OwnerDao (private val sql: DSLContext) {
     private val ownerTable = OwnerTable.instance
 
     private val ownerMapper = RecordMapper<Record, OwnerData>  { record ->
         OwnerData(
             record[ownerTable.id],
-            record[ownerTable.name],          // Use getValue for accessing field values
-            record[ownerTable.employeeId],    // Use getValue for accessing field values
-            record[ownerTable.companyId]     // Use getValue for accessing field values
+            record[ownerTable.name],
+            record[ownerTable.employeeId],
+            record[ownerTable.companyId]
         )
     }
 
