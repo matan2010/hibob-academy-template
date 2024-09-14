@@ -1,46 +1,79 @@
 package com.hibob.academy.dao
 
-import org.hibernate.validator.constraints.EAN.Type
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
-import org.jooq.SQLDialect
-import org.jooq.impl.DSL
-import org.jooq.impl.DefaultConfiguration
-import java.sql.Date // If you still need it
 import java.time.LocalDate
+
 class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
+    private val ownerTable = OwnerTable.instance
 
     private val patMapper = RecordMapper<Record, PetData>  { record ->
         PetData(
-            record[petTable.name],          // Use getValue for accessing field values
-            record[petTable.dateOfArrival],    // Use getValue for accessing field values
-            record[petTable.companyId],     // Use getValue for accessing field values
+            record[petTable.id],
+            record[petTable.name],
+            PetType.valueOf(record[petTable.type].uppercase()),
+            record[petTable.dateOfArrival],
+            record[petTable.companyId],
             record[petTable.ownerId]
 
         )
     }
 
-    fun getPets(type: PetType): List<PetData> {
-        return sql.select(petTable.name, petTable.dateOfArrival, petTable.companyId, petTable.type, petTable.ownerId)
+    fun getPetsByType(companyId:Long,type: PetType): List<PetData> {
+        return sql.select(petTable.id,petTable.name, petTable.dateOfArrival, petTable.companyId, petTable.type, petTable.ownerId)
             .from(petTable)
             .where(petTable.type.eq(type.name.lowercase()))
+            .and(petTable.companyId.eq(companyId))
             .fetch(patMapper)
     }
 
 
-    fun createNewPet(pet:PetDataType){
+    fun insertPet(name: String, type: PetType,companyId: Long ,ownerId:Long?) {
         sql.insertInto(petTable)
-            .set(petTable.name ,pet.name)
-            .set(petTable.ownerId, pet.ownerId)
-            .set(petTable.dateOfArrival ,pet.dateOfArrival)
-            .set(petTable.companyId ,pet.companyId)
-            .set(petTable.ownerId ,pet.ownerId)
-            .set(petTable.type ,PetType.Dog.name.lowercase())
+            .set(petTable.name ,name)
+            .set(petTable.ownerId, ownerId)
+            .set(petTable.dateOfArrival , LocalDate.now())
+            .set(petTable.companyId ,companyId)
+            .set(petTable.type ,type.toDatabaseValue())
             .onConflict(petTable.companyId,petTable.ownerId)
             .doNothing()
             .execute()
     }
+
+    fun adoptPet(petId: Long, ownerId: Long){
+        sql.update(petTable)
+            .set(petTable.ownerId, ownerId)
+            .where(petTable.id.eq(petId))
+            .execute()
+    }
+
+
+//    fun getOwnerByPetId(petId: Long,companyId: Long): OwnerData? {
+//        return sql.select(ownerTable.name, ownerTable.employeeId,ownerTable.companyId)//,ownerTable.id)
+//            .from(ownerTable)
+//            .join(petTable).on(petTable.ownerId.eq(ownerTable.employeeId))
+//            .where(petTable.id.eq(petId),petTable.companyId.eq(companyId))
+//            .fetchOneInto(OwnerData::class.java)
+//    }
+
+    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? {
+        return sql.select(
+            ownerTable.id,
+            ownerTable.name,
+            ownerTable.employeeId,
+            ownerTable.companyId
+        )
+            .from(ownerTable)
+            .join(petTable).on(petTable.ownerId.eq(ownerTable.id)) // Assuming ownerId from pets table relates to id from owner table
+            .where(
+                petTable.id.eq(petId),
+                petTable.companyId.eq(companyId)
+            )
+            .fetchOneInto(OwnerData::class.java)
+    }
+
+
 }

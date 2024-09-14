@@ -23,11 +23,35 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
     }
 
+    @Test
+    fun `get all owners by company Id`() {
+        dao.createNewOwner("Matan",222,companyId)
+        dao.createNewOwner("Nati",223,companyId)
+        dao.createNewOwner("Nisim",224,companyId)
+        dao.createNewOwner("Tami",225,7)
+        dao.createNewOwner("Tom",226,4)
+        val owners = dao.getAllOwner(companyId)
+        assertEquals(3, owners.size)
+        assertEquals(owners[0].name, "Matan")
+        assertEquals(owners[1].name, "Nati")
+        assertEquals(owners[2].name, "Nisim")
+
+    }
 
     @Test
     fun `make a new owner`() {
-        val ownerTest = OwnerData("matan",222,companyId)
-        dao.createNewOwner(ownerTest)
-        assertEquals(1, dao.getAllOwner().size)
+        dao.createNewOwner("matan",222,companyId)
+        val ownerTest=dao.getAllOwner(companyId)
+        assertTrue(dao.getAllOwner(companyId).contains(ownerTest[0]))
+    }
+
+    @Test
+    fun `insert an owner with the same companyId and employeeId`() {
+        dao.createNewOwner("Matan",222,companyId)
+        dao.createNewOwner("Nati",222,companyId)
+        val ownersList = dao.getAllOwner(companyId)
+        assertEquals(1, ownersList.size)
+        assertEquals("Matan", ownersList.get(0).name)
+        assertEquals(222, ownersList.get(0).employeeId)
     }
 }

@@ -11,9 +11,10 @@ import java.time.LocalDate
 
 @BobDbTest
 class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
-    private val companyId:Long=8
+    private val companyId:Long = 8L
     private val table=PetTable.instance
     private val dao = PetDao(sql)
+    private val ownerDao = OwnerDao(sql)
 
     @BeforeEach
     @AfterEach
@@ -24,19 +25,63 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     @Test
     fun `make a new pet`() {
         val name = "Buddy"
-        val dateOfArrival = LocalDate.of(2023, 5, 20)
-        val ownerId = 456L
-        val petTest = PetDataType(name, PetType.Dog ,dateOfArrival,companyId,ownerId)
-        dao.createNewPet(petTest)
-        // Use filter to find matching pets and check if the list is not empty
-        val filteredPets = dao.getPets(PetType.Dog).filter { pet ->
-            pet.name == petTest.name &&
-                    pet.companyId == petTest.companyId &&
-                    pet.dateOfArrival == petTest.dateOfArrival
-        }
+        dao.insertPet(name,PetType.DOG,companyId,null)
+        val petsList = dao.getPetsByType(companyId,PetType.DOG)
 
-// Assert that the filtered list is not empty, meaning the pet exists
-        assertTrue(filteredPets.isNotEmpty(), "Pet Waffle should have been added to the database")
+        assertEquals(1, petsList.size)
+        assertEquals(companyId, petsList[0].companyId)
+        assertEquals("Buddy", petsList[0].name)
+        assertEquals(PetType.DOG, petsList[0].type)
+    }
+
+
+    @Test
+    fun `pet by type when in the db not exists pets with this type`() {
+        val name = "Buddy"
+        dao.insertPet(name,PetType.DOG,companyId,null)
+        val petsList = dao.getPetsByType(companyId, PetType.CAT)
+        assertEquals(emptyList<PetData>(), petsList)
+
+    }
+
+
+    @Test
+    fun `adopt a pet`(){
+        val name = "Buddy"
+        dao.insertPet(name,PetType.DOG,companyId,null)
+        val petsList = dao.getPetsByType(companyId, PetType.DOG)
+        assertEquals(null, petsList[0].ownerId)
+
+        dao.adoptPet(petsList[0].id, 1L)
+        val petsListAfterUpdate = dao.getPetsByType(companyId, PetType.DOG)
+        assertEquals(1L, petsListAfterUpdate[0].ownerId)
+    }
+
+    @Test
+    fun `adopt a pet which is already adopted`() {
+        val name = "Buddy"
+        dao.insertPet(name,PetType.DOG,companyId,null)
+        val pet = dao.getPetsByType(companyId, PetType.DOG)[0]
+        dao.adoptPet(pet.id, 1L)
+        dao.adoptPet(pet.id, 2L)
+        val petsListAfterAdoption = dao.getPetsByType(companyId, PetType.DOG)
+        assertEquals(2L, petsListAfterAdoption[0].ownerId)
+    }
+
+    @Test
+    fun `get owner info by pet id`() {
+        //val ownerTest1 = OwnerData("Matan",222,companyId)
+        ownerDao.createNewOwner("Matan",222,companyId)
+        val ownersList = ownerDao.getAllOwner(companyId)
+        dao.insertPet("Buddy", PetType.DOG, companyId, ownersList[0].id)
+        dao.insertPet("Max", PetType.CAT, companyId, null)
+        val petIdWithOwner = dao.getPetsByType(companyId,PetType.DOG)
+
+        val ownerDataWithOwner = dao.getOwnerByPetId(petIdWithOwner[0].id,companyId)
+        assertNotNull(ownerDataWithOwner)
+        assertEquals("Matan", ownerDataWithOwner?.name)
+        assertEquals(222, ownerDataWithOwner?.employeeId)
+        assertEquals(companyId, ownerDataWithOwner?.companyId)
     }
 
 
