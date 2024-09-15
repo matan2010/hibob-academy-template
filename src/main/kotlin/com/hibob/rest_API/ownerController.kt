@@ -28,14 +28,13 @@ class OwnerResource {
 
     //GET: Retrieve all owners
     @GET
-    @Path("/getAll")
     fun getAll() : Response {
         return Response.ok(owners).build()
     }
 
     //GET: Retrieve owner by ownerId
     @GET
-    @Path("/getById/{ownerId}")
+    @Path("/{ownerId}")
     fun getById(@PathParam("ownerId") ownerId: Long): Response {
         val owner = owners.find { it.ownerId == ownerId }
         return when{
@@ -52,14 +51,12 @@ class OwnerResource {
     }
 
     @POST
-    @Path("/addOldOwner")
     fun addOwner(newOwner : oldOwner) : Response {
         owners.add(newOwner)
         return Response.status(Response.Status.CREATED).entity(newOwner).build()
     }
 
     @POST
-    @Path("/addOwner")
     fun addOwner(newOwner : Owner) : Response {
         newOwners.add(newOwner)
         return Response.status(Response.Status.CREATED).entity(newOwner).build()
@@ -69,7 +66,7 @@ class OwnerResource {
 
     //PUT: Update a owner by ownerId
     @PUT
-    @Path("/updateOwner/{ownerId}")
+    @Path("/{ownerId}")
     fun updateOwner(@PathParam("ownerId") ownerId: Long, updatedOwner: oldOwner): Response {
         val index = owners.indexOfFirst { it.ownerId == ownerId }
         return if (index>=0){
@@ -81,9 +78,8 @@ class OwnerResource {
         }
     }
 
-    //DELETE: Delete an owner by ownerId
     @DELETE
-    @Path("/deleteOwner/{ownerId}")
+    @Path("{ownerId}")
     fun deleteOwner(@PathParam("ownerId") ownerId: Long): Response {
         val owner = owners.find { it.ownerId == ownerId }
         return if(owner != null) {

@@ -38,13 +38,11 @@ class PetController {
     }
 
     @GET
-    @Path("/")
     fun getAllPets(): Response {
         return Response.ok(pets).build()
     }
 
     @POST
-    @Path("/")
     fun addPet(newPet: Pet): Response {
         pets.add(newPet)
         return Response.status(Response.Status.CREATED).entity(newPet).build()
@@ -52,7 +50,7 @@ class PetController {
 
 
     @PUT
-    @Path("/updatePet/{petId}")
+    @Path("/{petId}")
     fun updatePet(@PathParam("petId") petId: Long, updatedPet: Pet): Response {
         val index = pets.indexOfFirst { it.petId == petId }
         return if (index >= 0) {
@@ -65,7 +63,7 @@ class PetController {
 
 
     @DELETE
-    @Path("/deletePet/{petId}")
+    @Path("/{petId}")
     fun deletePet(@PathParam("petId") petId: Long): Response {
         val pet = pets.find { it.petId == petId }
         return if (pet != null) {
