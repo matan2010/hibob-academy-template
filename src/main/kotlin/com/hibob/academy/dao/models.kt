@@ -15,9 +15,10 @@ enum class PetType{
     fun toDatabaseValue(): String {
         return this.name.lowercase()  // Converts enum name to lowercase
     }
-
-    fun fromDatabaseValue(value: String): PetType {
-        return valueOf(value.uppercase())  // Converts the string to uppercase to match enum names
+    companion object {
+        fun fromDatabaseValue(value: String): PetType {
+            return valueOf(value.uppercase())  // Converts the string to uppercase to match enum names
+        }
     }
 
 }
