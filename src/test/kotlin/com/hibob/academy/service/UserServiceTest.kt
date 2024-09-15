@@ -16,7 +16,7 @@ class UserServiceTest{
     private val userService=UserService(userDao,notificationService,emailVerificationService)
 
     @Test
-    fun `test User service registerUser is userDao null`() {
+    fun `registerUser should throw exception if user already exists`() {
         val user = User(2L,"matan","@","123")
         whenever(userDao.findById(user.id)).thenReturn(user)
 
@@ -33,7 +33,7 @@ class UserServiceTest{
 
 
     @Test
-    fun `test User service registerUser userDao save false`() {
+    fun `registerUser should throw exception if user registration failed`() {
         val user = User(2L,"matan","@","123")
         whenever(userDao.findById(user.id)).thenReturn(null)
         whenever(userDao.save(user)).thenReturn(false)
@@ -48,7 +48,7 @@ class UserServiceTest{
     }
 
     @Test
-    fun `test User service registerUser email Verification Servicee false`() {
+    fun `registerUser should throw exception if failed to send verification email`() {
         val user = User(2L,"matan","@","123")
         whenever(userDao.findById(user.id)).thenReturn(null)
         whenever(userDao.save(user)).thenReturn(true)
@@ -63,7 +63,7 @@ class UserServiceTest{
     }
 
     @Test
-    fun `test User service registerUser ok`() {
+    fun `registerUser should return true`() {
         val user = User(2L,"matan","@","123")
         whenever(userDao.findById(user.id)).thenReturn(null)
         whenever(userDao.save(user)).thenReturn(true)
@@ -77,7 +77,7 @@ class UserServiceTest{
 
 
     @Test
-    fun `test User service verify email userDao is null`() {
+    fun `verifyUserEmail throw exception if user not found`() {
         val user = User(2L,"matan","@","123")
         val userId=2L
         val token="bla"
@@ -94,7 +94,7 @@ class UserServiceTest{
     }
 
     @Test
-    fun `test User service verify email Verification Service verify Email is false`() {
+    fun `verifyUserEmail throw exception if email verification failed`() {
         val userId=2L
         val token="bla"
         val user = User(2L,"matan","@","123")
@@ -112,7 +112,7 @@ class UserServiceTest{
 
 
     @Test
-    fun `test User service verify email is Updated is true`() {
+    fun `verifyUserEmail should return true and userService verifyUserEmail send true`() {
         val userId=2L
         val token="bla"
         val user = User(2L,"matan","@","123")
@@ -130,17 +130,17 @@ class UserServiceTest{
     }
 
     @Test
-    fun `test User service verify email is Updated is false`() {
+    fun `verifyUserEmail should return true and userService verifyUserEmail send false`() {
         val userId = 2L
         val token = "bla"
         val user = User(2L, "matan", "@", "123")
-        whenever(userDao.findById(userId)).thenReturn(user)
+        whenever(userDao.findById(user.id)).thenReturn(user)
         whenever(emailVerificationService.verifyEmail(user.email, token)).thenReturn(true)
         whenever(userDao.update(user.copy(isEmailVerified = true))).thenReturn(false)
 
         val result = userService.verifyUserEmail(userId, token)
 
-        assertTrue(!result)
+        assertFalse(result)
 
         verify(userDao).findById(userId)
         verify(emailVerificationService).verifyEmail("@", token)
