@@ -21,26 +21,16 @@ class AuthenticationFilter : ContainerRequestFilter {
     override fun filter(requestContext: ContainerRequestContext) {
         if (requestContext.uriInfo.path == LOGIN_PATH) return
 
-
-        try {
-            val cookie = requestContext.cookies
-
-            val jwtClaims = verify(cookie[COOKIE_NAME]?.value) ?: throw Exception("Invalid or expired token")
-
-        } catch (e: Exception) {
-            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(e.message).build())
-            return
-        }
+        val jwtCookie = requestContext.cookies[COOKIE_NAME]?.value
+        verify(jwtCookie, requestContext)
     }
 
-    private val jwtParser = Jwts.parser().setSigningKey(SECRET_KEY)
-
-    fun verify(cookie: String?): Jws<Claims>? =
+    fun verify(cookie: String?, requestContext: ContainerRequestContext) =
         cookie?.let {
             try {
-                jwtParser.parseClaimsJws(it)
-            } catch (ex: Exception) {
-                return null
+                Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(it)
+            } catch (e: Exception) {
+                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
             }
         }
 }
