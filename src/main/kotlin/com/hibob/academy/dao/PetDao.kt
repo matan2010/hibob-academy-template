@@ -13,7 +13,7 @@ class PetDao(private val sql: DSLContext) {
         PetData(
             record[petTable.id],
             record[petTable.name],
-            PetType.valueOf(record[petTable.type].uppercase()),
+            PetType.fromDatabaseValue(record[petTable.type]),
             record[petTable.dateOfArrival],
             record[petTable.companyId],
             record[petTable.ownerId]
@@ -45,7 +45,8 @@ class PetDao(private val sql: DSLContext) {
     fun adoptPet(petId: Long, ownerId: Long,companyId :Long){
         sql.update(petTable)
             .set(petTable.ownerId, ownerId)
-            .where(petTable.id.eq(petId), petTable.companyId.eq(companyId))
+            .where(petTable.id.eq(petId))
+            .and(petTable.companyId.eq(companyId))
             .execute()
     }
 
