@@ -19,7 +19,12 @@ class OwnerDao (private val sql: DSLContext) {
     }
 
     fun getAllOwner(companyId:Long): List<OwnerData> {
-        return sql.select(ownerTable.id,ownerTable.name,ownerTable.employeeId,ownerTable.companyId)
+        return sql.select(
+            ownerTable.id,
+            ownerTable.name,
+            ownerTable.employeeId,
+            ownerTable.companyId
+        )
             .from(ownerTable)
             .where(ownerTable.companyId.eq(companyId))
             .fetch(ownerMapper)
@@ -45,10 +50,8 @@ class OwnerDao (private val sql: DSLContext) {
         )
             .from(ownerTable)
             .join(petTable).on(petTable.ownerId.eq(ownerTable.id)) // Assuming ownerId from pets table relates to id from owner table
-            .where(
-                petTable.id.eq(petId),
-                petTable.companyId.eq(companyId)
-            )
+            .where(petTable.id.eq(petId))
+            .and(petTable.companyId.eq(companyId))
             .fetchOne(ownerMapper)//OwnerData::class.java)
     }
 
