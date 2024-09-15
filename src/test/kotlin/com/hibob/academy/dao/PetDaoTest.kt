@@ -14,7 +14,6 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     private val companyId:Long = 8L
     private val table=PetTable.instance
     private val dao = PetDao(sql)
-    private val ownerDao = OwnerDao(sql)
 
     @BeforeEach
     @AfterEach
@@ -52,7 +51,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
         val petsList = dao.getPetsByType(companyId, PetType.DOG)
         assertEquals(null, petsList[0].ownerId)
 
-        dao.adoptPet(petsList[0].id, 1L)
+        dao.adoptPet(petsList[0].id, 1L,companyId)
         val petsListAfterUpdate = dao.getPetsByType(companyId, PetType.DOG)
         assertEquals(1L, petsListAfterUpdate[0].ownerId)
     }
@@ -62,27 +61,12 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
         val name = "Buddy"
         dao.insertPet(name,PetType.DOG,companyId,null)
         val pet = dao.getPetsByType(companyId, PetType.DOG)[0]
-        dao.adoptPet(pet.id, 1L)
-        dao.adoptPet(pet.id, 2L)
+        dao.adoptPet(pet.id, 1L,companyId)
+        dao.adoptPet(pet.id, 2L,companyId)
         val petsListAfterAdoption = dao.getPetsByType(companyId, PetType.DOG)
         assertEquals(2L, petsListAfterAdoption[0].ownerId)
     }
 
-    @Test
-    fun `get owner info by pet id`() {
-        //val ownerTest1 = OwnerData("Matan",222,companyId)
-        ownerDao.createNewOwner("Matan",222,companyId)
-        val ownersList = ownerDao.getAllOwner(companyId)
-        dao.insertPet("Buddy", PetType.DOG, companyId, ownersList[0].id)
-        dao.insertPet("Max", PetType.CAT, companyId, null)
-        val petIdWithOwner = dao.getPetsByType(companyId,PetType.DOG)
-
-        val ownerDataWithOwner = dao.getOwnerByPetId(petIdWithOwner[0].id,companyId)
-        assertNotNull(ownerDataWithOwner)
-        assertEquals("Matan", ownerDataWithOwner?.name)
-        assertEquals(222, ownerDataWithOwner?.employeeId)
-        assertEquals(companyId, ownerDataWithOwner?.companyId)
-    }
 
 
 }

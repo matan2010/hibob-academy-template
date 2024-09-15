@@ -7,6 +7,7 @@ import org.jooq.RecordMapper
 
 class OwnerDao (private val sql: DSLContext) {
     private val ownerTable = OwnerTable.instance
+    private val petTable = PetTable.instance
 
     private val ownerMapper = RecordMapper<Record, OwnerData>  { record ->
         OwnerData(
@@ -32,6 +33,23 @@ class OwnerDao (private val sql: DSLContext) {
             .onConflict(ownerTable.companyId,ownerTable.employeeId)
             .doNothing()
             .execute()
+    }
+
+
+    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? {
+        return sql.select(
+            ownerTable.id,
+            ownerTable.name,
+            ownerTable.employeeId,
+            ownerTable.companyId
+        )
+            .from(ownerTable)
+            .join(petTable).on(petTable.ownerId.eq(ownerTable.id)) // Assuming ownerId from pets table relates to id from owner table
+            .where(
+                petTable.id.eq(petId),
+                petTable.companyId.eq(companyId)
+            )
+            .fetchOne(ownerMapper)//OwnerData::class.java)
     }
 
 }

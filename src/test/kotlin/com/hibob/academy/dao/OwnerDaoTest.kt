@@ -13,14 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired
 class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
 
     private val companyId:Long=8
-    private val table=OwnerTable.instance
+    private val ownerTable=OwnerTable.instance
+    private val petTable=PetTable.instance
     private val dao = OwnerDao(sql)
-
+    private val petDao = PetDao(sql)
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
+        sql.deleteFrom(petTable).where(petTable.companyId.eq(companyId)).execute()
     }
 
     @Test
@@ -53,5 +55,21 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(1, ownersList.size)
         assertEquals("Matan", ownersList.get(0).name)
         assertEquals(222, ownersList.get(0).employeeId)
+    }
+
+
+    @Test
+    fun `get owner info by pet id`() {
+        dao.createNewOwner("Matan",222,companyId)
+        val ownersList = dao.getAllOwner(companyId)
+        petDao.insertPet("Buddy", PetType.DOG, companyId, ownersList[0].id)
+        petDao.insertPet("Max", PetType.CAT, companyId, null)
+        val petIdWithOwner = petDao.getPetsByType(companyId,PetType.DOG)
+
+        val ownerDataWithOwner = dao.getOwnerByPetId(petIdWithOwner[0].id,companyId)
+        assertNotNull(ownerDataWithOwner)
+        assertEquals("Matan", ownerDataWithOwner?.name)
+        assertEquals(222, ownerDataWithOwner?.employeeId)
+        assertEquals(companyId, ownerDataWithOwner?.companyId)
     }
 }

@@ -8,9 +8,8 @@ import java.time.LocalDate
 class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
-    private val ownerTable = OwnerTable.instance
 
-    private val patMapper = RecordMapper<Record, PetData>  { record ->
+    private val petMapper = RecordMapper<Record, PetData>  { record ->
         PetData(
             record[petTable.id],
             record[petTable.name],
@@ -27,7 +26,7 @@ class PetDao(private val sql: DSLContext) {
             .from(petTable)
             .where(petTable.type.eq(type.name.lowercase()))
             .and(petTable.companyId.eq(companyId))
-            .fetch(patMapper)
+            .fetch(petMapper)
     }
 
 
@@ -43,28 +42,11 @@ class PetDao(private val sql: DSLContext) {
             .execute()
     }
 
-    fun adoptPet(petId: Long, ownerId: Long){
+    fun adoptPet(petId: Long, ownerId: Long,companyId :Long){
         sql.update(petTable)
             .set(petTable.ownerId, ownerId)
-            .where(petTable.id.eq(petId))
+            .where(petTable.id.eq(petId), petTable.companyId.eq(companyId))
             .execute()
     }
-
-    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? {
-        return sql.select(
-            ownerTable.id,
-            ownerTable.name,
-            ownerTable.employeeId,
-            ownerTable.companyId
-        )
-            .from(ownerTable)
-            .join(petTable).on(petTable.ownerId.eq(ownerTable.id)) // Assuming ownerId from pets table relates to id from owner table
-            .where(
-                petTable.id.eq(petId),
-                petTable.companyId.eq(companyId)
-            )
-            .fetchOneInto(OwnerData::class.java)
-    }
-
 
 }
