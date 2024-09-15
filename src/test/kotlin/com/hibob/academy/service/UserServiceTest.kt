@@ -131,18 +131,17 @@ class UserServiceTest{
 
     @Test
     fun `verifyUserEmail should return true and userService verifyUserEmail send false`() {
-        val userId = 2L
-        val token = "bla"
+        val token = "token"
         val user = User(2L, "matan", "@", "123")
         whenever(userDao.findById(user.id)).thenReturn(user)
         whenever(emailVerificationService.verifyEmail(user.email, token)).thenReturn(true)
         whenever(userDao.update(user.copy(isEmailVerified = true))).thenReturn(false)
 
-        val result = userService.verifyUserEmail(userId, token)
+        val result = userService.verifyUserEmail(user.id, token)
 
         assertFalse(result)
 
-        verify(userDao).findById(userId)
+        verify(userDao).findById(user.id)
         verify(emailVerificationService).verifyEmail("@", token)
         verify(userDao).update(user.copy(isEmailVerified = true))
         verify(notificationService, never()).sendEmail("@","sd")
