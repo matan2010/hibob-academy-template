@@ -1,4 +1,4 @@
-create table vaccineToPet
+create table vaccine_to_pet
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
     vaccine_id BIGINT NOT NULL,
