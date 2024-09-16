@@ -4,15 +4,16 @@ import com.hibob.academy.utils.JooqTable
 import org.jooq.DSLContext
 
 class VaccineToPetDao (private val sql: DSLContext){
+    private val table = VaccineToPetTable.instance
 }
 
 class VaccineToPetTable(tableName: String) : JooqTable(tableName) {
     val id = createBigIntField("id")
     val vaccineId = createVarcharField("name")
     val petId= createVarcharField("pet_id")
-    val vaccinationDate=createVarcharField("vaccination_date")
+    val vaccinationDate=createDateField("vaccination_date")
 
     companion object {
-        val instance = VaccineTable("vaccine")
+        val instance = VaccineToPetTable("vaccine_to_pet")
     }
 }
