@@ -22,7 +22,7 @@ fun initializeNullableCustomers(): List<Customer?> {
     )
 }
 
-fun main() {
+fun main7() {
     val customers = initializeNullableCustomers()
 
     customers.forEach {customer-> println("The name is: ${customer?.name?: "Name Unknown"} The account ID is: ${customer?.account?.id ?: "Account ID Unknown"} The account balance is: ${customer?.account?.details?.balance ?: "Balance Not Available"} ")}

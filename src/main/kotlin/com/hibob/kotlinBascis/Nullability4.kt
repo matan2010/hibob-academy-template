@@ -9,7 +9,7 @@ package com.hibob.kotlinBascis
 data class Address(val city: String?, val street: String?)
 data class Employee(val name: String?, val address: Address?)
 
-fun main() {
+fun main1() {
     val employees = listOf(
         Employee("John", Address("New York", "Fifth Ave")),
         Employee("Jane", null),
