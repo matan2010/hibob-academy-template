@@ -1,7 +1,7 @@
 create table vaccineToPet
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
-    vaccineId BIGINT NOT NULL,
-    petId BIGINT NOT NULL,
-    vaccinationDate DATE DEFAULT now()
+    vaccine_id BIGINT NOT NULL,
+    pet_id BIGINT NOT NULL,
+    vaccination_date DATE DEFAULT now()
 )
