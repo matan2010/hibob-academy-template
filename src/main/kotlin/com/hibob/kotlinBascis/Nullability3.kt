@@ -7,7 +7,7 @@ package com.hibob.kotlinBascis
  *
  **/
 fun String?.nullSafeToUpper():String = this?.uppercase()?: "NO TEXT PROVIDED"
-fun main() {
+fun main2() {
     val text: String? = "Learn Kotlin"
     println(text.nullSafeToUpper())
 //     Task: Create and use an extension function to print text in uppercase if it's not null, or "NO TEXT PROVIDED" if it is null.
