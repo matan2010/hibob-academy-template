@@ -3,8 +3,10 @@ package com.hibob.academy.dao
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
+import org.springframework.stereotype.Component
 import java.time.LocalDate
 
+@Component
 class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
