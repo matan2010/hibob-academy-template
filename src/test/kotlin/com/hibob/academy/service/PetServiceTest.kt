@@ -18,6 +18,7 @@ class PetServiceTest{
         private val validCompanyId = 8L
         private val illegalCompanyId = -1L
         private val validOwnerId= 5L
+        private val inValidOwnerId= -5L
         private val validName = "Matan"
         private val ownerId = 10L
         private val illegalOwnerId = -10L
@@ -90,9 +91,9 @@ class PetServiceTest{
         }
 
         @Test
-        fun `insertPet should throw exception if ownerId is null or less than zero`() {
+        fun `insertPet should throw exception if ownerId is less than zero`() {
             val exception = assertThrows<IllegalArgumentException> {
-                petService.insertPet(validName, validPetType, validCompanyId, null)
+                petService.insertPet(validName, validPetType, validCompanyId, inValidOwnerId)
             }
             assertEquals("Invalid ownerId", exception.message)
             verify(petDaoMock, never()).insertPet(validName, petTypeDog, validCompanyId, validOwnerId)
