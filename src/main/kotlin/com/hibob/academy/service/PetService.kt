@@ -3,8 +3,11 @@ package com.hibob.academy.service
 import com.hibob.academy.dao.PetDao
 import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetType
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-class PetService(private val petDao : PetDao){
+@Component
+class PetService @Autowired constructor(private val petDao : PetDao){
 
     fun getPetsByType(companyId:Long, type: String): List<PetData> {
         if(companyId < 0){
