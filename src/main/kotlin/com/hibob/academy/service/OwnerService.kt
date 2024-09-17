@@ -35,6 +35,8 @@ class OwnerService @Autowired constructor(private val ownerDao : OwnerDao){
         if(companyId < 0){
             throw IllegalArgumentException("Company id must be greater than 0")
         }
-        return ownerDao.getOwnerByPetId(petId, companyId)
+        val owner= ownerDao.getOwnerByPetId(petId, companyId)
+            ?: throw IllegalArgumentException("There is no owner with this id")
+        return owner
     }
 }
