@@ -37,8 +37,6 @@ class PetDao(private val sql: DSLContext) {
             .set(petTable.dateOfArrival , LocalDate.now())
             .set(petTable.companyId ,companyId)
             .set(petTable.type ,type.toDatabaseValue())
-            .onConflict(petTable.companyId,petTable.ownerId)
-            .doNothing()
             .execute()
     }
 
