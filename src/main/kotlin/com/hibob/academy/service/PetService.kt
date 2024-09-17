@@ -6,29 +6,30 @@ import com.hibob.academy.dao.PetType
 
 class PetService(private val petDao : PetDao){
 
-    fun getPetsByType(companyId:Long, type: String?): List<PetData> {
+    fun getPetsByType(companyId:Long, type: String): List<PetData> {
         if(companyId < 0){
             throw IllegalArgumentException("Invalid companyId")
         }
-        if(type == null){
-            throw IllegalArgumentException("Invalid type")
+        if (!isValidPetType(type)){
+            throw IllegalArgumentException("Invalid PetType: $type")
         }
         return petDao.getPetsByType(companyId, PetType.fromDatabaseValue(type))
     }
 
-    fun insertPet(name: String, type: String?,companyId: Long ,ownerId:Long?) {
+    fun insertPet(name: String, type: String,companyId: Long ,ownerId:Long?) {
         if(name == ""){
             throw IllegalArgumentException("Name cannot be empty")
-        }
-        if(type == null){
-            throw IllegalArgumentException("Type cannot be empty")
         }
         if(companyId < 0){
             throw IllegalArgumentException("Invalid companyId")
         }
-        if(ownerId == null || ownerId < 0){
+        if(ownerId != null && ownerId < 0){
             throw IllegalArgumentException("Invalid ownerId")
         }
+        if (!isValidPetType(type)){
+            throw IllegalArgumentException("Invalid PetType: $type")
+        }
+
         return petDao.insertPet(name, PetType.fromDatabaseValue(type),companyId,ownerId)
     }
 
@@ -43,5 +44,9 @@ class PetService(private val petDao : PetDao){
             throw IllegalArgumentException("Invalid companyId")
         }
         return petDao.adoptPet(petId,ownerId,companyId)
+    }
+
+    private fun isValidPetType(value: String): Boolean {
+        return enumValues<PetType>().any { it.name.equals(value, ignoreCase = true) }
     }
 }
