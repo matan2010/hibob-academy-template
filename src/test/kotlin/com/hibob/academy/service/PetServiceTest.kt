@@ -22,6 +22,7 @@ class PetServiceTest{
         private val ownerId = 10L
         private val illegalOwnerId = -10L
         private val validPetType = "DOG"
+        private val invalidPetType = "123"
         private val petTypeDog = PetType.DOG
         private  val validPetId= 7L
         private  val illegalPetId= -7L
@@ -39,9 +40,9 @@ class PetServiceTest{
         @Test
         fun `getPetsByType should throw exception if type is null`() {
             val exception = assertThrows<IllegalArgumentException> {
-                petService.getPetsByType(validCompanyId, null)
+                petService.getPetsByType(validCompanyId, invalidPetType)
             }
-            assertEquals("Invalid type", exception.message)
+            assertEquals("Invalid PetType: 123", exception.message)
             verify(petDaoMock, never()).getPetsByType(validCompanyId, petTypeDog)
         }
 
@@ -73,9 +74,9 @@ class PetServiceTest{
         @Test
         fun `insertPet should throw exception if type is null`() {
             val exception = assertThrows<IllegalArgumentException> {
-                petService.insertPet(validName, null, validCompanyId, validOwnerId)
+                petService.insertPet(validName, invalidPetType, validCompanyId, validOwnerId)
             }
-            assertEquals("Type cannot be empty", exception.message)
+            assertEquals("Invalid PetType: 123", exception.message)
             verify(petDaoMock, never()).insertPet(validName, petTypeDog, validCompanyId, validOwnerId)
         }
 
