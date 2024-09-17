@@ -90,6 +90,7 @@ class PetServiceTest{
             verify(petDaoMock, never()).insertPet(validName, petTypeDog, validCompanyId, validOwnerId)
         }
 
+
         @Test
         fun `insertPet should throw exception if ownerId is less than zero`() {
             val exception = assertThrows<IllegalArgumentException> {
