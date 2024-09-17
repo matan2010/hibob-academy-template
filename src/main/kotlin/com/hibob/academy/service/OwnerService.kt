@@ -2,8 +2,11 @@ package com.hibob.academy.service
 
 import com.hibob.academy.dao.OwnerDao
 import com.hibob.academy.dao.OwnerData
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-class OwnerService(private val ownerDao : OwnerDao){
+@Component
+class OwnerService @Autowired constructor(private val ownerDao : OwnerDao){
 
     fun getAllOwner(companyId:Long): List<OwnerData> {
         if(companyId < 0){
