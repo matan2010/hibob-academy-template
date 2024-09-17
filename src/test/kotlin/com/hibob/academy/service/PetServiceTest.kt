@@ -99,6 +99,7 @@ class PetServiceTest{
             verify(petDaoMock, never()).insertPet(validName, petTypeDog, validCompanyId, validOwnerId)
         }
 
+
         @Test
         fun `insertPet should insert pet successfully`() {
             petService.insertPet(validName, validPetType, validCompanyId, validOwnerId)
