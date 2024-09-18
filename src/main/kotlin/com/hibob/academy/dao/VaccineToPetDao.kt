@@ -9,8 +9,8 @@ class VaccineToPetDao (private val sql: DSLContext){
 
 class VaccineToPetTable(tableName: String) : JooqTable(tableName) {
     val id = createBigIntField("id")
-    val vaccineId = createVarcharField("vaccine_id")
-    val petId= createVarcharField("pet_id")
+    val vaccineId = createBigIntField("vaccine_id")
+    val petId= createBigIntField("pet_id")
     val vaccinationDate=createDateField("vaccination_date")
 
     companion object {
