@@ -11,14 +11,14 @@ import java.time.LocalDate
 
 @BobDbTest
 class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
-    private val companyId:Long = 8L
+    private val companyId = 8L
     private val table=PetTable.instance
     private val dao = PetDao(sql)
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(table).execute()
     }
 
     @Test
@@ -68,5 +68,28 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     }
 
 
+    @Test
+    fun `adopt Multiple Pets whit owner Id`() {
 
+        dao.insertPet("Buddy",PetType.DOG,companyId,null)
+        dao.insertPet("Bob",PetType.CAT,7L,null)
+        dao.insertPet("Rookie",PetType.DOG,companyId,4L)
+
+        val listPet = dao.getPetsByType(companyId, PetType.DOG)
+
+        val listPetsId = listPet.map { it.id }
+        val countPets = dao.adoptMultiplePets(listPetsId, 7L,companyId)
+        assertEquals(countPets,listPetsId.size)
+    }
+
+    @Test
+    fun `add multiple pets with batch insert and upsert`() {
+        val pet1 = Pet("Buddy",PetType.DOG,companyId,null)
+        val pet2 = Pet("Bob",PetType.CAT,companyId,null)
+        val pet3 = Pet("Rookie",PetType.DOG,companyId,4L)
+
+        val listPets = listOf<Pet>(pet1,pet2,pet3)
+        val countPets = dao.addMultiplePets(listPets,companyId)
+        assertEquals(countPets,listPets.size)
+    }
 }

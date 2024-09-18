@@ -72,4 +72,5 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(222, ownerDataWithOwner?.employeeId)
         assertEquals(companyId, ownerDataWithOwner?.companyId)
     }
+
 }
