@@ -142,5 +142,18 @@ class PetServiceTest{
 
 
 
+        @Test
+        fun `countPetsByType throw exception if companyId is less than zero`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                petService.countPetsByType(illegalCompanyId)
+            }
+            assertEquals("Invalid companyId", exception.message)
+        }
+
+        @Test
+        fun `countPetsByType should adopt pet successfully`() {
+            petService.countPetsByType(validCompanyId)
+            verify(petDaoMock).countPetsByType(validCompanyId)
+        }
 
 }
