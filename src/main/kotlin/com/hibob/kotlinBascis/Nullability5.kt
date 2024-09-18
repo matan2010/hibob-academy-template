@@ -7,7 +7,7 @@ package com.hibob.kotlinBascis
  * If either name or price is null, do not print anything for that product.
  *
  */
-
+//
 //data class Product(val name: String?, val price: Double?)
 //
 //fun main5() {
