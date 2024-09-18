@@ -1,5 +1,4 @@
-package com.hibob.kotlinBasics//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+package com.hibob.kotlinBasics
 fun main() {
     //“hello world” program
     fun helloWorld() {
@@ -25,15 +24,6 @@ fun main() {
     multiplication(b=2,a=4)
 }
 
-fun isValidIdentifier(s: String): Boolean {
-    if(s.length < 1) return false
-    val a = s.get(0)
-    if('0'<= a && '9' >= a) return false
-    for (i in s){
-       if(!((i=='_'||'A'<= i && 'Z'>= i) || ('a'<= i && 'z'>= i )||('0'<= i && '9'>= i) ) ) return false
-    }
-    return true
-}
 
 
 
