@@ -3,8 +3,9 @@ package com.hibob.academy.dao
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import org.springframework.stereotype.Component
 
-
+@Component
 class OwnerDao (private val sql: DSLContext) {
     private val ownerTable = OwnerTable.instance
     private val petTable = PetTable.instance
@@ -49,10 +50,10 @@ class OwnerDao (private val sql: DSLContext) {
             ownerTable.companyId
         )
             .from(ownerTable)
-            .join(petTable).on(petTable.ownerId.eq(ownerTable.id)) // Assuming ownerId from pets table relates to id from owner table
+            .join(petTable).on(petTable.ownerId.eq(ownerTable.id))
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
-            .fetchOne(ownerMapper)//OwnerData::class.java)
+            .fetchOne(ownerMapper)
     }
 
 }

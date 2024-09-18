@@ -3,8 +3,11 @@ package com.hibob.academy.dao
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
+import org.springframework.stereotype.Component
 import java.time.LocalDate
 
+
+@Component
 class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
@@ -30,6 +33,7 @@ class PetDao(private val sql: DSLContext) {
     }
 
 
+
     fun insertPet(name: String, type: PetType,companyId: Long ,ownerId:Long?) {
         sql.insertInto(petTable)
             .set(petTable.name ,name)
@@ -37,10 +41,9 @@ class PetDao(private val sql: DSLContext) {
             .set(petTable.dateOfArrival , LocalDate.now())
             .set(petTable.companyId ,companyId)
             .set(petTable.type ,type.toDatabaseValue())
-            .onConflict(petTable.companyId,petTable.ownerId)
-            .doNothing()
             .execute()
     }
+
 
     fun adoptPet(petId: Long, ownerId: Long,companyId :Long){
         sql.update(petTable)
