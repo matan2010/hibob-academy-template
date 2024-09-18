@@ -1,6 +1,5 @@
 package com.hibob.academy.dao
 
-import org.hibernate.validator.constraints.EAN.Type
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -52,14 +51,6 @@ class PetDao(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
-    }
-
-    fun getPetsByOwnerId(ownerID:Long): List<PetData> {
-        return sql.select(petTable.name, petTable.dateOfArrival, petTable.companyId, petTable.type, petTable.ownerId)
-            .from(petTable)
-            .where(petTable.ownerId.eq(ownerID))
-            .fetch(patMapper)
-
     }
 
 }
