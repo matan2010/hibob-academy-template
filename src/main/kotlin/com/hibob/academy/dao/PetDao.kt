@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 @Component
 class PetDao(private val sql: DSLContext) {
-
+    private val ownerTable = OwnerTable.instance
     private val petTable = PetTable.instance
 
     private val petMapper = RecordMapper<Record, PetData>  { record ->
@@ -51,6 +51,14 @@ class PetDao(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
+    }
+
+    fun getPetsByOwner(ownerId: Long): List<PetData> {
+        return sql.select()
+            .from(petTable)
+            .join(ownerTable).on(petTable.ownerId.eq(ownerTable.id))
+            .where(ownerTable.id.eq(ownerId))
+            .fetch(petMapper)
     }
 
 }

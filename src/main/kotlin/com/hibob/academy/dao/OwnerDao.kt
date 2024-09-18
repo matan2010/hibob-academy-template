@@ -56,4 +56,5 @@ class OwnerDao (private val sql: DSLContext) {
             .fetchOne(ownerMapper)
     }
 
+
 }
