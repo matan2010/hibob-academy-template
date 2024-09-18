@@ -8,20 +8,20 @@ package com.hibob.kotlinBascis
  *
  */
 
-data class Product(val name: String?, val price: Double?)
-
-fun main5() {
-    val products = listOf(
-        Product("Laptop", 999.99),
-        Product(null, 299.99),
-        Product("Smartphone", null),
-        Product(null, null)
-    )
-
-    for (product in products) {
-        product.name?.let{
-            product.price?.let { println("Product: ${ product.name} - ${product.price}") }
-        }
-    }
-    // Task: Print the details of products only if both name and price are not null.
-}
+//data class Product(val name: String?, val price: Double?)
+//
+//fun main5() {
+//    val products = listOf(
+//        Product("Laptop", 999.99),
+//        Product(null, 299.99),
+//        Product("Smartphone", null),
+//        Product(null, null)
+//    )
+//
+//    for (product in products) {
+//        product.name?.let{
+//            product.price?.let { println("Product: ${ product.name} - ${product.price}") }
+//        }
+//    }
+//    // Task: Print the details of products only if both name and price are not null.
+//}
