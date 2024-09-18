@@ -84,5 +84,17 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
         assertEquals(companyId, actualPets[1].companyId)
     }
 
+    @Test
+    fun `countPetsByType should return correct count of pets by type`() {
+        dao.insertPet("Buddy", PetType.DOG, companyId, null)
+        dao.insertPet("Bobi", PetType.DOG, companyId, null)
+        dao.insertPet("Bobi", PetType.CAT, companyId, null)
+
+        val petCounts = dao.countPetsByType(companyId)
+        assertEquals(2, petCounts.size)
+        assertEquals(2, petCounts["dog"])
+        assertEquals(1, petCounts["cat"])
+    }
+
 
 }
