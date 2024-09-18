@@ -53,11 +53,11 @@ class PetDao(private val sql: DSLContext) {
             .execute()
     }
 
-    fun getPetsByOwner(ownerId: Long): List<PetData> {
+    fun getPetsByOwnerId(ownerId: Long,companyId :Long): List<PetData> {
         return sql.select()
             .from(petTable)
-            .join(ownerTable).on(petTable.ownerId.eq(ownerTable.id))
-            .where(ownerTable.id.eq(ownerId))
+            .where(petTable.companyId.eq(companyId))
+            .and(petTable.ownerId.eq(ownerId))
             .fetch(petMapper)
     }
 

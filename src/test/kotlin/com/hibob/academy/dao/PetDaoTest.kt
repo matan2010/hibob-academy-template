@@ -18,7 +18,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(table).execute()
     }
 
     @Test
@@ -67,6 +67,22 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
         assertEquals(2L, petsListAfterAdoption[0].ownerId)
     }
 
+
+    @Test
+    fun `getPetsByOwner returns all pets for owner Id `() {
+        dao.insertPet("Buddy", PetType.DOG, companyId, -5)
+        dao.insertPet("Bobi", PetType.DOG, companyId, -6)
+        dao.insertPet("Bobi", PetType.CAT, companyId, -5)
+
+        val actualPets = dao.getPetsByOwnerId(-5,companyId)
+
+
+        assertEquals(2, actualPets.size)
+        assertEquals("Buddy", actualPets[0].name)
+        assertEquals("Bobi", actualPets[1].name)
+        assertEquals(companyId, actualPets[0].companyId)
+        assertEquals(companyId, actualPets[1].companyId)
+    }
 
 
 }
