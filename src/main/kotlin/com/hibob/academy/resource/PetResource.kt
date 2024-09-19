@@ -16,15 +16,19 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/matan/sabag/pets/")
+@Path("/api/pets/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class PetResource (private val petService: PetService) {
 
-
+    @GET
+    @Path("pets-by-owner-id/ownerId/{ownerId}/company/{companyId}")
+    fun getPetsByOwnerId( @PathParam("ownerId") ownerId: Long,@PathParam("companyId") companyId: Long): Response {
+        return Response.ok(petService.getPetsByOwnerId(ownerId,companyId)).build()
+    }
 
     @GET
-    @Path("countPetsByType/{companyId}")
+    @Path("count-by-type/company/{companyId}")
     fun countPetsByType( @PathParam("companyId") companyId: Long): Response {
         return Response.ok(petService.countPetsByType(companyId)).build()
     }

@@ -56,7 +56,15 @@ class PetService @Autowired constructor(private val petDao : PetDao){
         return petDao.countPetsByType(companyId)
     }
 
-
+    fun getPetsByOwnerId(ownerId: Long,companyId :Long): List<PetData> {
+        if(ownerId < 0){
+            throw IllegalArgumentException("Invalid ownerId")
+        }
+        if(companyId < 0){
+            throw IllegalArgumentException("Invalid companyId")
+        }
+        return petDao.getPetsByOwnerId(ownerId,companyId)
+    }
 
     private fun isValidPetType(value: String): Boolean {
         return enumValues<PetType>().any { it.name.equals(value, ignoreCase = true) }

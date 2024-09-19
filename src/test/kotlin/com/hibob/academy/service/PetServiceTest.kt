@@ -156,4 +156,10 @@ class PetServiceTest{
             verify(petDaoMock).countPetsByType(validCompanyId)
         }
 
+        @Test
+        fun `getPetsByOwnerId should get pet successfully`() {
+            petService.getPetsByOwnerId(ownerId,validCompanyId)
+            verify(petDaoMock).getPetsByOwnerId(ownerId,validCompanyId)
+        }
+
 }
