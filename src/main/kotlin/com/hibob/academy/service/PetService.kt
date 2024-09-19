@@ -1,5 +1,6 @@
 package com.hibob.academy.service
 
+import com.hibob.academy.dao.Pet
 import com.hibob.academy.dao.PetDao
 import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetType
@@ -48,6 +49,15 @@ class PetService @Autowired constructor(private val petDao : PetDao){
         }
         return petDao.adoptPet(petId,ownerId,companyId)
     }
+
+
+//    fun adoptMultiplePets(listPetId: List<Long>, ownerId: Long, companyId: Long): Int {
+//
+//    }
+//
+//    fun addMultiplePets(listPetData: List<Pet>, companyId: Long): Int {
+//
+//    }
 
     private fun isValidPetType(value: String): Boolean {
         return enumValues<PetType>().any { it.name.equals(value, ignoreCase = true) }
