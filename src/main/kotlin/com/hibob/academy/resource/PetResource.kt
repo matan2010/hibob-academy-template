@@ -16,7 +16,7 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/matan/sabag/pets/")
+@Path("/api/pets/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class PetResource (private val petService: PetService) {
