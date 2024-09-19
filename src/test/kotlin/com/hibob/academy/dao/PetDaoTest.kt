@@ -83,7 +83,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext)  {
     }
 
     @Test
-    fun `add multiple pets with batch insert and upsert`() {
+    fun `add multiple pets with batch insert`() {
         val pet1 = Pet("Buddy",PetType.DOG,companyId,null)
         val pet2 = Pet("Bob",PetType.CAT,companyId,null)
         val pet3 = Pet("Rookie",PetType.DOG,companyId,4L)
