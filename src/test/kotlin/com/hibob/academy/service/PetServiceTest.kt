@@ -140,6 +140,15 @@ class PetServiceTest{
             verify(petDaoMock).adoptPet(validPetId, validOwnerId, validCompanyId)
         }
 
+        @Test
+        fun `adoptMultiplePets should adopt multiple pet successfully`() {
+            val listOfPetsId= listOf(
+               1L,2L,3L
+            )
+            petService.adoptMultiplePets(listOfPetsId, validOwnerId, validCompanyId)
+            verify(petDaoMock).adoptMultiplePets(listOfPetsId, validOwnerId, validCompanyId)
+        }
+
 
 
 

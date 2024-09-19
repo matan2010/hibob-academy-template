@@ -51,13 +51,28 @@ class PetService @Autowired constructor(private val petDao : PetDao){
     }
 
 
-//    fun adoptMultiplePets(listPetId: List<Long>, ownerId: Long, companyId: Long): Int {
-//
-//    }
-//
-//    fun addMultiplePets(listPetData: List<Pet>, companyId: Long): Int {
-//
-//    }
+    fun adoptMultiplePets(listPetId: List<Long>, ownerId: Long, companyId: Long): Int {
+        if(listPetId.isEmpty()){
+            throw IllegalArgumentException("Invalid list pet Id")
+        }
+        if(ownerId < 0){
+            throw IllegalArgumentException("Invalid ownerId")
+        }
+        if(companyId < 0){
+            throw IllegalArgumentException("Invalid companyId")
+        }
+        return petDao.adoptMultiplePets(listPetId,ownerId,companyId)
+    }
+
+    fun addMultiplePets(listPetData: List<Pet>, companyId: Long): Int {
+        if(listPetData.isEmpty()){
+            throw IllegalArgumentException("Invalid list pet Id")
+        }
+        if(companyId < 0){
+            throw IllegalArgumentException("Invalid companyId")
+        }
+        return petDao.addMultiplePets(listPetData,companyId)
+    }
 
     private fun isValidPetType(value: String): Boolean {
         return enumValues<PetType>().any { it.name.equals(value, ignoreCase = true) }
