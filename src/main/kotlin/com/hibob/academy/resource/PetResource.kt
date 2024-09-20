@@ -39,7 +39,7 @@ class PetResource(private val petService: PetService) {
         @PathParam("ownerId") ownerId: Long,
         @PathParam("companyId") companyId: Long
     ): Response {
-        return Response.ok(petService.adoptMultiplePets(listOfPetsId,ownerId, companyId)).build()
+        return Response.ok(petService.adoptMultiplePets(listOfPetsId, ownerId, companyId)).build()
     }
 
 }
