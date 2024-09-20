@@ -22,13 +22,13 @@ import org.springframework.stereotype.Controller
 class PetResource (private val petService: PetService) {
 
     @GET
-    @Path("pets-by-owner-id/ownerId/{ownerId}/company/{companyId}")
+    @Path("ownerId/{ownerId}/company/{companyId}/pets")
     fun getPetsByOwnerId( @PathParam("ownerId") ownerId: Long,@PathParam("companyId") companyId: Long): Response {
         return Response.ok(petService.getPetsByOwnerId(ownerId,companyId)).build()
     }
 
     @GET
-    @Path("count-by-type/company/{companyId}")
+    @Path("company/{companyId}/pets/count")
     fun countPetsByType( @PathParam("companyId") companyId: Long): Response {
         return Response.ok(petService.countPetsByType(companyId)).build()
     }
