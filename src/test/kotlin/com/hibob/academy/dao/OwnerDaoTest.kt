@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
 
 @BobDbTest
 class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
