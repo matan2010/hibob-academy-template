@@ -31,7 +31,7 @@ class PetServiceTest {
 
 
     @Test
-    fun `getPetsByType should throw exception if companyId is less than zero`() {
+    fun `getPetsByType should throw exception if companyId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.getPetsByType(illegalCompanyId, validPetType)
         }
@@ -83,7 +83,7 @@ class PetServiceTest {
     }
 
     @Test
-    fun `insertPet should throw exception if companyId is less than zero`() {
+    fun `insertPet should throw exception if companyId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.insertPet(validName, validPetType, illegalCompanyId, validOwnerId)
         }
@@ -92,7 +92,7 @@ class PetServiceTest {
     }
 
     @Test
-    fun `insertPet should throw exception if ownerId is less than zero`() {
+    fun `insertPet should throw exception if ownerId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.insertPet(validName, validPetType, validCompanyId, inValidOwnerId)
         }
@@ -108,7 +108,7 @@ class PetServiceTest {
     }
 
     @Test
-    fun `adoptPet should throw exception if petId is less than zero`() {
+    fun `adoptPet should throw exception if petId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.adoptPet(illegalPetId, validOwnerId, validCompanyId)
         }
@@ -117,7 +117,7 @@ class PetServiceTest {
     }
 
     @Test
-    fun `adoptPet should throw exception if ownerId is less than zero`() {
+    fun `adoptPet should throw exception if ownerId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.adoptPet(validPetId, illegalOwnerId, validCompanyId)
         }
@@ -126,7 +126,7 @@ class PetServiceTest {
     }
 
     @Test
-    fun `adoptPet should throw exception if companyId is less than zero`() {
+    fun `adoptPet should throw exception if companyId is negative`() {
         val exception = assertThrows<IllegalArgumentException> {
             petService.adoptPet(validPetId, validOwnerId, illegalCompanyId)
         }
