@@ -1,7 +1,5 @@
 package com.hibob.academy.resource
 
-//import com.hibob.academy.dao.Pet
-//import com.hibob.academy.dao.PetInsert
 import com.hibob.academy.dao.Pet
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
@@ -32,7 +30,7 @@ class PetResource(private val petService: PetService) {
     }
 
 
-    @POST
+    @PUT
     @Path("company/{companyId}/owner/{ownerId}/pets/adopt")
     fun adoptMultiplePets(
         listOfPetsId: List<Long>,
