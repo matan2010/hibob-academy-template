@@ -24,8 +24,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `viewAllFeedback should be successful`() {
         val listFeedback = listOf(
-            Feedback("Hi", 5L, companyId, LocalDate.now(), "Dev", "UNREVIEWED"),
-            Feedback("By", null, companyId, LocalDate.now(), "Hr", "UNREVIEWED")
+            Feedback("Hi", 5L, companyId, LocalDate.now(), TechDepartment.DEVELOPMENT, StatusFeedback.UNREVIEWED),
+            Feedback("By", null, companyId, LocalDate.now(), TechDepartment.UX, StatusFeedback.UNREVIEWED)
         )
         dao.insertFeedback(listFeedback[0])
         dao.insertFeedback(listFeedback[1])
@@ -42,7 +42,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `insertFeedback should be successful`() {
-        val feedback = Feedback("Hi", 5L, companyId, LocalDate.now(), "Dev", "UNREVIEWED")
+        val feedback = Feedback("Hi", 5L, companyId, LocalDate.now(), TechDepartment.IT, StatusFeedback.UNREVIEWED)
         val isInsert = dao.insertFeedback(feedback)
         assert(isInsert)
     }

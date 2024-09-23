@@ -1,6 +1,5 @@
 package com.hibob.academy.employeeFeedback.dao
 
-import com.hibob.academy.dao.OwnerData
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
@@ -17,8 +16,8 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.employeeId],
             record[feedbackTable.companyId],
             record[feedbackTable.date],
-            record[feedbackTable.department],
-            record[feedbackTable.status]
+            TechDepartment.fromDatabaseValue(record[feedbackTable.department]),
+            StatusFeedback.fromDatabaseValue(record[feedbackTable.status])
         )
     }
 
@@ -43,8 +42,8 @@ class FeedbackDao(private val sql: DSLContext) {
             .set(feedbackTable.employeeId, feedback.employeeId)
             .set(feedbackTable.companyId, feedback.companyId)
             .set(feedbackTable.date, feedback.data)
-            .set(feedbackTable.department, feedback.department)
-            .set(feedbackTable.status, feedback.status)
+            .set(feedbackTable.department, feedback.department.toDatabaseValue())
+            .set(feedbackTable.status, feedback.status.toDatabaseValue())
             .execute() > 0
     }
 
