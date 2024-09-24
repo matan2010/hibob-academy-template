@@ -5,6 +5,7 @@ import com.hibob.academy.employeeFeedback.dao.EmployeeDao
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
@@ -17,7 +18,7 @@ class SessionService @Autowired constructor(private val employeeDao: EmployeeDao
     }
 
     fun createJWTToken(employee: Employee): String {
-        val employeeDetails = employeeDao.getEmployee(employee) ?: throw BadRequestException("Employee not found")
+        val employeeDetails = employeeDao.getEmployee(employee) ?: throw NotFoundException("Employee not found")
 
         return Jwts.builder()
             .setHeaderParam("typ", "JWT")
