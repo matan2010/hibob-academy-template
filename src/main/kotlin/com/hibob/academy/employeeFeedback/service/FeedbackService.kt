@@ -12,16 +12,10 @@ import org.springframework.stereotype.Component
 class FeedbackService @Autowired constructor(private val feedbackDao: FeedbackDao) {
 
     fun viewAllFeedback(role: Role, companyId: Long): List<FeedbackData> {
-        if (role == Role.EMPLOYEE) {
-            throw BadRequestException("You do not have permission to see all the feedback.")
-        }
         return feedbackDao.viewAllFeedback(companyId)
     }
 
     fun insertFeedback(feedback: Feedback) {
-        if (feedback.feedback.length < 10) {
-            throw BadRequestException("The feedback is too short.")
-        }
         feedbackDao.insertFeedback(feedback)
     }
 }
