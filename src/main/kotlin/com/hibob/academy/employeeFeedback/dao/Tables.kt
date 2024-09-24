@@ -9,7 +9,6 @@ class FeedbackTable(tableName: String = "feedback") : JooqTable(tableName) {
     val employeeId = createBigIntField("employee_id")
     val companyId = createBigIntField("company_id")
     val date = createLocalDateField("date")
-    val department = createVarcharField("department")
     val status = createVarcharField("status")
 
     companion object {

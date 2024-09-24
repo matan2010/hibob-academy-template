@@ -8,7 +8,6 @@ data class FeedbackData(
     val employeeId: Long?,
     val companyId: Long,
     val data: LocalDate,
-    val department: Department,
     val status: FeedbackStatus
 )
 
@@ -17,7 +16,6 @@ data class Feedback(
     val employeeId: Long?,
     val companyId: Long,
     val data: LocalDate,
-    val department: Department,
     val status: FeedbackStatus
 )
 
@@ -26,6 +24,7 @@ data class Employee(
     val lastName: String,
     val role: Role,
     val companyId: Long,
+    val department: Department
 )
 
 

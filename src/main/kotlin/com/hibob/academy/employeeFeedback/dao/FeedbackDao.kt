@@ -16,7 +16,6 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.employeeId],
             record[feedbackTable.companyId],
             record[feedbackTable.date],
-            Department.fromDatabaseValue(record[feedbackTable.department]),
             FeedbackStatus.fromDatabaseValue(record[feedbackTable.status])
         )
     }
@@ -34,7 +33,6 @@ class FeedbackDao(private val sql: DSLContext) {
             .set(feedbackTable.employeeId, feedback.employeeId)
             .set(feedbackTable.companyId, feedback.companyId)
             .set(feedbackTable.date, feedback.data)
-            .set(feedbackTable.department, feedback.department.toDatabaseValue())
             .set(feedbackTable.status, feedback.status.toDatabaseValue())
             .execute() > 0
     }
