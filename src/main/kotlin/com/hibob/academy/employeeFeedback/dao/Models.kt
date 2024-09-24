@@ -19,12 +19,17 @@ data class Feedback(
     val status: FeedbackStatus
 )
 
-data class Employee(
-    val firstName: String,
-    val lastName: String,
+data class EmployeeData(
+    val id: Long,
     val role: Role,
     val companyId: Long,
     val department: Department
+)
+
+data class Employee(
+    val firstName: String,
+    val lastName: String,
+    val companyId: Long
 )
 
 
@@ -49,7 +54,17 @@ enum class Role {
     ADMIN,
     HR,
     MANAGER,
-    EMPLOYEE
+    EMPLOYEE;
+
+    fun toDatabaseValue(): String {
+        return this.name.lowercase()
+    }
+
+    companion object {
+        fun fromDatabaseValue(value: String): Role {
+            return valueOf(value.uppercase())
+        }
+    }
 }
 
 
