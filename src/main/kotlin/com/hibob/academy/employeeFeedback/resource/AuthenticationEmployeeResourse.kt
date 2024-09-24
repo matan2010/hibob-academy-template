@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller
 
 @Controller
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/jwt/employee")
+@Path("/api/employee")
 class AuthenticationEmployeeResourse(private val service: SessionEmployeeService) {
 
     @Path("/login")
