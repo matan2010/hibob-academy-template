@@ -23,7 +23,9 @@ class AuthenticationEmployeeResourse(private val service: SessionEmployeeService
     @Consumes(MediaType.APPLICATION_JSON)
     fun registerEmployee(employee: Employee): Response {
         val tokenJwt = service.createJWTToken(employee)
-        val cookie = NewCookie.Builder("matan_name").value(tokenJwt).build()//Creating new cookie
+        val cookie = NewCookie.Builder("matan_name").value(tokenJwt).path("/api/").build()//Creating new cookie
         return Response.ok().cookie(cookie).build()
     }
+
+
 }
