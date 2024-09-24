@@ -26,7 +26,6 @@ data class Employee(
     val lastName: String,
     val role: TechRole,
     val companyId: Long,
-    val department: TechDepartment,
 )
 
 
