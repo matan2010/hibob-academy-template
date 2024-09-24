@@ -26,6 +26,4 @@ class AuthenticationEmployeeResourse(private val service: SessionEmployeeService
         val cookie = NewCookie.Builder("matan_name").value(tokenJwt).path("/api/").build()//Creating new cookie
         return Response.ok().cookie(cookie).build()
     }
-
-
 }
