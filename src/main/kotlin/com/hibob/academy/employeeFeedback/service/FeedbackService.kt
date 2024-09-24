@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class FeedbackService @Autowired constructor(private val feedbackDao: FeedbackDao) {
 
-    fun viewAllFeedback(role: Role, companyId: Long): List<FeedbackData> {
+    fun viewAllFeedback(companyId: Long): List<FeedbackData> {
         return feedbackDao.viewAllFeedback(companyId)
     }
 
