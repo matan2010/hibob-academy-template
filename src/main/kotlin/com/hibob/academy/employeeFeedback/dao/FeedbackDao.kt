@@ -16,21 +16,13 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.employeeId],
             record[feedbackTable.companyId],
             record[feedbackTable.date],
-            TechDepartment.fromDatabaseValue(record[feedbackTable.department]),
-            StatusFeedback.fromDatabaseValue(record[feedbackTable.status])
+            Department.fromDatabaseValue(record[feedbackTable.department]),
+            FeedbackStatus.fromDatabaseValue(record[feedbackTable.status])
         )
     }
 
     fun viewAllFeedback(companyId: Long): List<FeedbackData> {
-        return sql.select(
-            feedbackTable.id,
-            feedbackTable.feedback,
-            feedbackTable.employeeId,
-            feedbackTable.companyId,
-            feedbackTable.date,
-            feedbackTable.department,
-            feedbackTable.status
-        )
+        return sql.select()
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)

@@ -8,8 +8,8 @@ data class FeedbackData(
     val employeeId: Long?,
     val companyId: Long,
     val data: LocalDate,
-    val department: TechDepartment,
-    val status: StatusFeedback
+    val department: Department,
+    val status: FeedbackStatus
 )
 
 data class Feedback(
@@ -17,19 +17,19 @@ data class Feedback(
     val employeeId: Long?,
     val companyId: Long,
     val data: LocalDate,
-    val department: TechDepartment,
-    val status: StatusFeedback
+    val department: Department,
+    val status: FeedbackStatus
 )
 
 data class Employee(
     val firstName: String,
     val lastName: String,
-    val role: TechRole,
+    val role: Role,
     val companyId: Long,
 )
 
 
-enum class TechDepartment {
+enum class Department {
     DEVELOPMENT,
     IT,
     DATA_ANALYTICS,
@@ -40,13 +40,13 @@ enum class TechDepartment {
     }
 
     companion object {
-        fun fromDatabaseValue(value: String): TechDepartment {
+        fun fromDatabaseValue(value: String): Department {
             return valueOf(value.uppercase())
         }
     }
 }
 
-enum class TechRole {
+enum class Role {
     ADMIN,
     HR,
     MANAGER,
@@ -54,7 +54,7 @@ enum class TechRole {
 }
 
 
-enum class StatusFeedback {
+enum class FeedbackStatus {
     REVIEWED,
     UNREVIEWED;
 
@@ -63,7 +63,7 @@ enum class StatusFeedback {
     }
 
     companion object {
-        fun fromDatabaseValue(value: String): StatusFeedback {
+        fun fromDatabaseValue(value: String): FeedbackStatus {
             return valueOf(value.uppercase())
         }
     }
