@@ -10,6 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired
 class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val dao = EmployeeDao(sql)
 
+    @Test
+    fun `getEmployee should return null`() {
+        val employee = Employee("123", "123", 1L)
+        val employeeDao = dao.getEmployee(employee)
+        assertNull(employeeDao)
+    }
 
     @Test
     fun `getEmployee should be successful`() {
