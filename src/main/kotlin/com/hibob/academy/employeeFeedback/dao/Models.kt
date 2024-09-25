@@ -14,9 +14,6 @@ data class FeedbackData(
 data class Feedback(
     val feedback: String,
     val employeeId: Long?,
-    val companyId: Long,
-    val data: LocalDate,
-    val status: FeedbackStatus
 )
 
 data class EmployeeData(
