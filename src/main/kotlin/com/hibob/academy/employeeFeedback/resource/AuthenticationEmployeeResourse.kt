@@ -2,8 +2,6 @@ package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.Employee
 import com.hibob.academy.employeeFeedback.service.SessionEmployeeService
-import com.hibob.academy.resource.User
-import com.hibob.academy.service.SessionService
 import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
@@ -23,7 +21,7 @@ class AuthenticationEmployeeResourse(private val service: SessionEmployeeService
     @Consumes(MediaType.APPLICATION_JSON)
     fun registerEmployee(employee: Employee): Response {
         val tokenJwt = service.createJWTToken(employee)
-        val cookie = NewCookie.Builder("matan_name").value(tokenJwt).path("/api/").build()//Creating new cookie
+        val cookie = NewCookie.Builder("matan_name").value(tokenJwt).path("/api/").build()
         return Response.ok().cookie(cookie).build()
     }
 }

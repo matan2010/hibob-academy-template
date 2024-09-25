@@ -1,7 +1,9 @@
 package com.hibob.academy.filters
 
+import com.hibob.academy.employeeFeedback.dao.Department
+import com.hibob.academy.employeeFeedback.dao.EmployeeData
+import com.hibob.academy.employeeFeedback.dao.Role
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.container.ContainerRequestFilter
@@ -16,8 +18,10 @@ import jakarta.ws.rs.ext.Provider
 class AuthenticationFilter : ContainerRequestFilter {
     companion object {
         private const val LOGIN_PATH = "api/employee/login"
-        private const val COOKIE_NAME = "matan_name"  // Replace with actual cookie name
+        private const val COOKIE_NAME = "matan_name"
+        const val EMPLOYEE= "employee"
     }
+
 
     override fun filter(requestContext: ContainerRequestContext) {
 
@@ -27,11 +31,30 @@ class AuthenticationFilter : ContainerRequestFilter {
         verify(jwtCookie, requestContext)
     }
 
-    fun verify(cookie: String?, requestContext: ContainerRequestContext) =
+
+    fun verify(cookie: String?, requestContext: ContainerRequestContext) {
+        if (cookie == null) {
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
+            return
+        }
         try {
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(cookie)
+            val claims: Claims = Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(cookie)
+                .body
+
+            val employeeData = EmployeeData(
+                id = (claims["id"] as Number).toLong(),
+                role = Role.fromDatabaseValue(claims["role"] as String),
+                companyId = (claims["companyId"] as Number).toLong(),
+                department = Department.fromDatabaseValue(claims["department"] as String)
+            )
+            requestContext.setProperty(EMPLOYEE, employeeData)
         } catch (e: Exception) {
+            e.printStackTrace()
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
         }
+    }
 
 }
