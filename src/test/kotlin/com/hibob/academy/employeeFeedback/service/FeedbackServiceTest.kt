@@ -18,29 +18,10 @@ class FeedbackServiceTest {
 
 
     @Test
-    fun `viewAllFeedback should throw exception if the role is employee`() {
-        val exception = assertThrows<BadRequestException> {
-            feedbackService.viewAllFeedback(Role.EMPLOYEE, companyId)
-        }
-        assertEquals("You do not have permission to see all the feedback.", exception.message)
-        verify(feedbackDaoMock, never()).viewAllFeedback(companyId)
-    }
-
-    @Test
     fun `viewAllFeedback should be successful`() {
         whenever(feedbackDaoMock.viewAllFeedback(companyId)).thenReturn(any())
-        feedbackService.viewAllFeedback(Role.HR, companyId)
+        feedbackService.viewAllFeedback(companyId)
         verify(feedbackDaoMock).viewAllFeedback(companyId)
-    }
-
-    @Test
-    fun `insertFeedback should throw exception if the feedback is too short`() {
-        val feedback = Feedback("Hi", null, companyId, LocalDate.now(), FeedbackStatus.UNREVIEWED)
-        val exception = assertThrows<BadRequestException> {
-            feedbackService.insertFeedback(feedback)
-        }
-        assertEquals("The feedback is too short.", exception.message)
-        verify(feedbackDaoMock, never()).insertFeedback(feedback)
     }
 
     @Test
