@@ -25,7 +25,7 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
             ?: return Response.status(Response.Status.UNAUTHORIZED).build()
         val role = employeeData.role
         if (role == Role.EMPLOYEE) {
-            throw BadRequestException("You do not have permission to see all the feedback.")
+            throw NotAuthorizedException("You do not have permission to see all the feedback.")
         }
         val companyId = employeeData.companyId
         return Response.ok(feedbackService.viewAllFeedback(companyId)).build()

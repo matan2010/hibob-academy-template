@@ -19,9 +19,10 @@ class AuthenticationFilter : ContainerRequestFilter {
     companion object {
         private const val LOGIN_PATH = "api/employee/login"
         private const val COOKIE_NAME = "matan_name"
-        const val EMPLOYEE= "employee"
+        const val EMPLOYEE = "employee"
     }
 
+    private val logger = org.slf4j.LoggerFactory.getLogger(AuthenticationFilter::class.java)
 
     override fun filter(requestContext: ContainerRequestContext) {
 
@@ -52,7 +53,7 @@ class AuthenticationFilter : ContainerRequestFilter {
             )
             requestContext.setProperty(EMPLOYEE, employeeData)
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error(e.message, e)
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
         }
     }
