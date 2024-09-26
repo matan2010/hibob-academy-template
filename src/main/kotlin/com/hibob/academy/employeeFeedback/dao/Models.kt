@@ -29,6 +29,18 @@ data class Employee(
     val companyId: Long
 )
 
+data class FeedbackResponseData(
+    val feedbackId: Long,
+    val response: String,
+    val employeeId: Long,
+    val data: LocalDate,
+)
+
+data class FeedbackResponse(
+    val feedbackId: Long,
+    val response: String
+  )
+
 data class NewEmployee(
     val firstName: String,
     val lastName: String,
