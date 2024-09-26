@@ -41,22 +41,29 @@ class FeedbackDao(private val sql: DSLContext) {
 
 
     fun getFeedbackByParams(companyId: Long, params: FeedbackQueryParams): List<FeedbackData> {
-        val query = sql.select()
+        val baseQuery = sql.select()
             .from(feedbackTable)
             .leftJoin(employeeTable).on(feedbackTable.employeeId.eq(employeeTable.id))
             .where(feedbackTable.companyId.eq(companyId))
 
-        params.department?.let {
-            query.and(employeeTable.department.eq(it.name))
-                .and(feedbackTable.employeeId.eq(employeeTable.id))
-        }
-
-        if (params.nullEmployeeId)
-            query.and(feedbackTable.employeeId.isNull)
-
-        params.date?.let {
-            query.and(feedbackTable.date.eq(params.date))
-        }
+        val query = baseQuery
+            .let { q ->
+                params.department?.let {
+                    q.and(employeeTable.department.eq(it.name))
+                } ?: q
+            }
+            .let { q ->
+                if (params.nullEmployeeId) {
+                    q.and(feedbackTable.employeeId.isNull)
+                } else {
+                    q
+                }
+            }
+            .let { q ->
+                params.date?.let {
+                    q.and(feedbackTable.date.eq(it))
+                } ?: q
+            }
 
         return query.fetch(feedbackMapper)
     }
