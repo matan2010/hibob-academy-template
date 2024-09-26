@@ -19,19 +19,16 @@ class FeedbackService @Autowired constructor(private val feedbackDao: FeedbackDa
     }
 
     fun updateFeedbackStatus(feedbackId: Long, companyId: Long, feedbackStatus: FeedbackStatus): Boolean {
-        //retrun FeedbackDao.updateFeedbackStatus(feedbackId,companyId, feedbackStatus)
-        TODO()
+        return feedbackDao.updateFeedbackStatus(feedbackId, companyId, feedbackStatus)
     }
 
     fun checkFeedbackStatus(feedbackId: Long, employeeId: Long, companyId: Long): String? {
-        //retrun FeedbackDao.checkFeedbackStatus(feedbackId,employeeId, companyId)
-        TODO()
+        return feedbackDao.checkFeedbackStatus(feedbackId, employeeId, companyId)
     }
-    //getFeedbackByParams
 
     //fun getFeedbackByParams(companyId: Long,params:FeedbackQueryParams): List<FeedbackData>{
-        //retrun FeedbackDao.getFeedbackByParams(feedbackId,params)
-      //  TODO()
+    //retrun FeedbackDao.getFeedbackByParams(feedbackId,params)
+    //  TODO()
     //}
 
 
