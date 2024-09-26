@@ -32,7 +32,7 @@ data class Employee(
     val companyId: Long
 )
 
-data class ResponseFeedbackData(
+data class FeedbackResponseData(
     val feedbackId: Long,
     val response: String,
     val employeeId: Long,
