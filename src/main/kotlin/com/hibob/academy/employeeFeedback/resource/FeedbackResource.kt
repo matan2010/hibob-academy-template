@@ -43,5 +43,51 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
         return Response.ok(feedbackService.insertFeedback(feedback,companyId)).build()
     }
 
+
+    @Path("/updateFeedbackStatus")
+    @POST
+    fun updateFeedbackStatus(
+        feedbackId: Long,
+        @Context requestContext: ContainerRequestContext
+    ): Response {
+//        val result = feedbackService.updateFeedbackStatus(feedbackId, companyId, feedbackStatus)
+//        return if (result) {
+//            ResponseEntity.ok(true)
+//        } else {
+//            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false)
+//        }
+    }
+
+
+    @Path("/checkFeedbackStatus")
+    @GET
+    fun checkFeedbackStatus(
+//        @RequestParam feedbackId: Long,
+//        @RequestParam employeeId: Long,
+//        @RequestParam companyId: Long
+//    ): Response{
+//        val status = feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)
+//        return if (status != null) {
+//            ResponseEntity.ok(status)
+//        } else {
+//            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+//        }
+    }
+
+
+    @Path("/feedbackByParams")
+    @GET
+    fun getFeedbackByParams(
+//        @RequestParam companyId: Long,
+//        @RequestParam(required = false) date: LocalDate?,
+//        @RequestParam(required = false) department: Department?,
+//        @RequestParam nullEmployeeId: Boolean
+//    ): Response {
+//        val params = FeedbackQueryParams(date, department, nullEmployeeId)
+//        val feedbackList = feedbackService.getFeedbackByParams(companyId, params)
+//        return ResponseEntity.ok(feedbackList)
+    }
+
+
 }
 
