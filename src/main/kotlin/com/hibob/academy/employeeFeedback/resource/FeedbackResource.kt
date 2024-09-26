@@ -33,11 +33,14 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
 
     @Path("/feedback")
     @POST
-    fun insertFeedback(feedback: Feedback): Response {
+    fun insertFeedback(feedback: Feedback,@Context requestContext: ContainerRequestContext): Response {
         if (feedback.feedback.length < 10) {
             throw BadRequestException("The feedback is too short.")
         }
-        return Response.ok(feedbackService.insertFeedback(feedback)).build()
+        val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
+            ?: return Response.status(Response.Status.UNAUTHORIZED).build()
+        val companyId = employeeData.companyId
+        return Response.ok(feedbackService.insertFeedback(feedback,companyId)).build()
     }
 
 }
