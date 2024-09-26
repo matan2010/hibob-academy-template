@@ -32,6 +32,13 @@ data class Employee(
     val companyId: Long
 )
 
+data class NewEmployee(
+    val firstName: String,
+    val lastName: String,
+    val role: Role,
+    val companyId: Long,
+    val department: Department
+)
 
 enum class Department {
     DEVELOPMENT,
