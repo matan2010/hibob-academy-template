@@ -26,5 +26,21 @@ class FeedbackServiceTest {
         verify(feedbackDaoMock).insertFeedback(feedback,companyId)
     }
 
+    @Test
+    fun `updateFeedbackStatus should be successful`() {
+        //TODO
+    }
+
+    @Test
+    fun `checkFeedbackStatus should be successful`() {
+        //TODO
+    }
+
+
+    @Test
+    fun `getFeedbackByParams should be successful`() {
+        //TODO
+    }
+
 
 }
