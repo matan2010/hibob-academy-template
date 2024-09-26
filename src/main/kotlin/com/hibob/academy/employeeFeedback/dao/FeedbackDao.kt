@@ -41,6 +41,7 @@ class FeedbackDao(private val sql: DSLContext) {
 
 
 
+
     fun getFeedbackByParams(companyId: Long, params: FeedbackQueryParams): List<FeedbackData> {
         val baseQuery = sql.select()
             .from(feedbackTable)
@@ -77,5 +78,23 @@ class FeedbackDao(private val sql: DSLContext) {
     ) = params.department?.let {
         q.and(employeeTable.department.eq(it.name))
     } ?: q
+
+    fun updateFeedbackStatus(feedbackId: Long, companyId: Long, feedbackStatus: FeedbackStatus): Boolean {
+        return sql.update(feedbackTable)
+            .set(feedbackTable.status, feedbackStatus.toDatabaseValue())
+            .where(feedbackTable.id.eq(feedbackId))
+            .and(feedbackTable.companyId.eq(companyId))
+            .execute() > 0
+    }
+
+    fun checkFeedbackStatus(feedbackId: Long, employeeId: Long, companyId: Long): String? {
+        return sql.select(feedbackTable.status)
+            .from(feedbackTable)
+            .where(feedbackTable.companyId.eq(companyId))
+            .and(feedbackTable.employeeId.eq(employeeId))
+            .and(feedbackTable.id.eq(feedbackId))
+            .fetchOne(feedbackTable.status)
+    }
+
 
 }
