@@ -15,7 +15,6 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
     private val feedbackDao = FeedbackDao(sql)
     private val employeeDao = EmployeeDao(sql)
-
     @BeforeEach
     @AfterEach
     fun cleanup() {
