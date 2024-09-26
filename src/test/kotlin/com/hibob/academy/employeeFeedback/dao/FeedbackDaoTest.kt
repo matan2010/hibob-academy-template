@@ -10,14 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired
 
 @BobDbTest
 class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
-    private val companyId: Long = 8L
-    private val table = FeedbackTable.instance
-    private val dao = FeedbackDao(sql)
+    private val companyId: Long = -8L
+    private val feedbackTable = FeedbackTable.instance
+    private val employeeTable = EmployeeTable.instance
+    private val feedbackDao = FeedbackDao(sql)
+    private val employeeDao = EmployeeDao(sql)
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).execute()
+        sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
+        sql.deleteFrom(employeeTable).where(employeeTable.companyId.eq(companyId)).execute()
     }
 
     @Test
@@ -26,9 +29,9 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
             Feedback("Hi", 5L),
             Feedback("By", null)
         )
-        dao.insertFeedback(listFeedback[0], companyId)
-        dao.insertFeedback(listFeedback[1], companyId)
-        val allFeedback = dao.viewAllFeedback(companyId)
+        feedbackDao.insertFeedback(listFeedback[0], companyId)
+        feedbackDao.insertFeedback(listFeedback[1], companyId)
+        val allFeedback = feedbackDao.viewAllFeedback(companyId)
         assertEquals(listFeedback.size, allFeedback.size)
 
         for (i in listFeedback.indices) {
@@ -42,5 +45,27 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         val feedback = Feedback("Hi", 5L)
         val isInsert = dao.insertFeedback(feedback, companyId)
         assert(isInsert)
+    }
+
+
+
+    @Test
+    fun `checkFeedbackStatus should be successful`() {
+        val feedback = Feedback("Hi", 5L)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val allFeedback = feedbackDao.viewAllFeedback(companyId)
+        val feedbackStatus = feedbackDao.checkFeedbackStatus(allFeedback[0].id, 5L, companyId)
+        assertNotNull(feedbackStatus)
+        assertEquals(feedbackStatus?.let { FeedbackStatus.fromDatabaseValue(it) }, FeedbackStatus.UNREVIEWED)
+    }
+
+
+    @Test
+    fun `checkFeedbackStatus should returns null`() {
+        val feedback = Feedback("Hi", 5L)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val allFeedback = feedbackDao.viewAllFeedback(companyId)
+        val feedbackStatus = feedbackDao.checkFeedbackStatus(allFeedback[0].id, 5L, 1)
+        assertNull(feedbackStatus)
     }
 }

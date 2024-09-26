@@ -38,4 +38,13 @@ class FeedbackDao(private val sql: DSLContext) {
             .execute() > 0
     }
 
+    fun checkFeedbackStatus(feedbackId: Long, employeeId: Long, companyId: Long): String? {
+        return sql.select(feedbackTable.status)
+            .from(feedbackTable)
+            .where(feedbackTable.companyId.eq(companyId))
+            .and(feedbackTable.employeeId.eq(employeeId))
+            .and(feedbackTable.id.eq(feedbackId))
+            .fetchOne(feedbackTable.status)
+    }
+
 }
