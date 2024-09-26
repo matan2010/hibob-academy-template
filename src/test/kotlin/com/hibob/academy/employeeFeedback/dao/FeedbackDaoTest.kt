@@ -3,7 +3,7 @@ package com.hibob.academy.employeeFeedback.dao
 import com.hibob.academy.utils.BobDbTest
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,7 +43,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `insertFeedback should be successful`() {
         val feedback = Feedback("Hi", 5L)
-        val isInsert = dao.insertFeedback(feedback, companyId)
+        val isInsert = feedbackDao.insertFeedback(feedback, companyId)
         assert(isInsert)
     }
 
