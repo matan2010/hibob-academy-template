@@ -29,6 +29,12 @@ data class Employee(
     val companyId: Long
 )
 
+data class FeedbackQueryParams(
+    val date: LocalDate? = null,
+    val department: Department? = null,
+    val nullEmployeeId: Boolean
+)
+
 data class FeedbackResponseData(
     val feedbackId: Long,
     val response: String,
@@ -40,6 +46,7 @@ data class FeedbackResponse(
     val feedbackId: Long,
     val response: String
   )
+
 
 data class NewEmployee(
     val firstName: String,

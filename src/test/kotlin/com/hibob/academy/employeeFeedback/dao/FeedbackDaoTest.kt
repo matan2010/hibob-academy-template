@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
 
 @BobDbTest
 class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
@@ -15,6 +16,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
     private val feedbackDao = FeedbackDao(sql)
     private val employeeDao = EmployeeDao(sql)
+
     @BeforeEach
     @AfterEach
     fun cleanup() {
@@ -45,6 +47,66 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         val isInsert = feedbackDao.insertFeedback(feedback, companyId)
         assert(isInsert)
     }
+
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by date`() {
+        val feedback = Feedback("Hi", 5L)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), null, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by date and employee id null`() {
+        val feedback = Feedback("Hi", null)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), null, true)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by null Employee Id`() {
+        val feedback = Feedback("Hi", null)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(null, null, true)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by department`() {
+        val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
+        employeeDao.insertEmployee(newEmployee1)
+        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        assertNotNull(employee)
+        val feedback = Feedback("Hi", employee?.id)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(null, Department.UX, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by department and date`() {
+        val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
+        employeeDao.insertEmployee(newEmployee1)
+        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        assertNotNull(employee)
+        val feedback = Feedback("Hi", employee?.id)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), Department.UX, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
 
 
 
@@ -79,4 +141,5 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         assertNotNull(feedbackStatus)
         assertEquals(feedbackStatus?.let { FeedbackStatus.fromDatabaseValue(it) }, FeedbackStatus.REVIEWED)
     }
+
 }
