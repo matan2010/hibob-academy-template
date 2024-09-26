@@ -38,6 +38,14 @@ class FeedbackDao(private val sql: DSLContext) {
             .execute() > 0
     }
 
+    fun updateFeedbackStatus(feedbackId: Long, companyId: Long, feedbackStatus: FeedbackStatus): Boolean {
+        return sql.update(feedbackTable)
+            .set(feedbackTable.status, feedbackStatus.toDatabaseValue())
+            .where(feedbackTable.id.eq(feedbackId))
+            .and(feedbackTable.companyId.eq(companyId))
+            .execute() > 0
+    }
+
     fun checkFeedbackStatus(feedbackId: Long, employeeId: Long, companyId: Long): String? {
         return sql.select(feedbackTable.status)
             .from(feedbackTable)

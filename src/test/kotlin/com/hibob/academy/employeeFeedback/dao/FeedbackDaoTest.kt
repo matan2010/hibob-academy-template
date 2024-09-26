@@ -15,7 +15,6 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
     private val feedbackDao = FeedbackDao(sql)
     private val employeeDao = EmployeeDao(sql)
-
     @BeforeEach
     @AfterEach
     fun cleanup() {
@@ -67,5 +66,17 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         val allFeedback = feedbackDao.viewAllFeedback(companyId)
         val feedbackStatus = feedbackDao.checkFeedbackStatus(allFeedback[0].id, 5L, 1)
         assertNull(feedbackStatus)
+    }
+
+    @Test
+    fun `updateFeedbackStatus should be successful`() {
+        val feedback = Feedback("Hi", 5L)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val allFeedback = feedbackDao.viewAllFeedback(companyId)
+        val isUpdate = feedbackDao.updateFeedbackStatus(allFeedback[0].id, companyId, FeedbackStatus.REVIEWED)
+        assert(isUpdate)
+        val feedbackStatus = feedbackDao.checkFeedbackStatus(allFeedback[0].id, 5L, companyId)
+        assertNotNull(feedbackStatus)
+        assertEquals(feedbackStatus?.let { FeedbackStatus.fromDatabaseValue(it) }, FeedbackStatus.REVIEWED)
     }
 }
