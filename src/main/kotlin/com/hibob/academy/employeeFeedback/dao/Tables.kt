@@ -29,5 +29,17 @@ class EmployeeTable(tableName: String = "employees") : JooqTable(tableName) {
     companion object {
         val instance = EmployeeTable()
     }
+}
 
+class ResponseTable(tableName: String = "response") : JooqTable(tableName) {
+
+    val id = createBigIntField("id")
+    val feedbackId = createBigIntField("feedback_id")
+    val response = createVarcharField("response")
+    val employeeId = createBigIntField("employee_id")
+    val date = createLocalDateField("date")
+
+    companion object {
+        val instance = ResponseTable()
+    }
 }

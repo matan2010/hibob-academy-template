@@ -29,6 +29,47 @@ data class Employee(
     val companyId: Long
 )
 
+data class FeedbackQueryParams(
+    val date: LocalDate? = null,
+    val department: Department? = null,
+    val nullEmployeeId: Boolean
+)
+
+data class NewEmployee(
+    val firstName: String,
+    val lastName: String,
+    val role: Role,
+    val companyId: Long,
+    val department: Department
+)
+data class ResponseFeedbackData(
+    val feedbackId: Long,
+    val response: String,
+    val employeeId: Long,
+    val data: LocalDate,
+)
+
+data class ResponseFeedback(
+    val feedbackId: Long,
+    val response: String
+)
+
+enum class Filter{
+    DATE,
+    DEPARTMENT,
+    ANONYMOUS;
+
+    fun toDatabaseValue(): String {
+        return this.name.lowercase()
+    }
+
+    companion object {
+        fun fromDatabaseValue(value: String): Filter {
+            return Filter.valueOf(value.uppercase())
+        }
+    }
+}
+
 
 enum class Department {
     DEVELOPMENT,
