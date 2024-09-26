@@ -3,6 +3,7 @@ package com.hibob.academy.employeeFeedback.dao
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import org.jooq.SelectConditionStep
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -47,25 +48,34 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.companyId.eq(companyId))
 
         val query = baseQuery
-            .let { q ->
-                params.department?.let {
-                    q.and(employeeTable.department.eq(it.name))
-                } ?: q
-            }
-            .let { q ->
-                if (params.nullEmployeeId) {
-                    q.and(feedbackTable.employeeId.isNull)
-                } else {
-                    q
-                }
-            }
-            .let { q ->
-                params.date?.let {
-                    q.and(feedbackTable.date.eq(it))
-                } ?: q
-            }
+            .let { q -> handleDepartmentCondition(params, q) }
+            .let { q -> handleEmployeeIdCondition(params, q) }
+            .let { q -> handleDateCondition(params, q) }
 
         return query.fetch(feedbackMapper)
     }
+
+    private fun handleDateCondition(
+        params: FeedbackQueryParams,
+        q: SelectConditionStep<Record>
+    ) = params.date?.let {
+        q.and(feedbackTable.date.eq(it))
+    } ?: q
+
+    private fun handleEmployeeIdCondition(
+        params: FeedbackQueryParams,
+        q: SelectConditionStep<Record>
+    ) = if (params.nullEmployeeId) {
+        q.and(feedbackTable.employeeId.isNull)
+    } else {
+        q
+    }
+
+    private fun handleDepartmentCondition(
+        params: FeedbackQueryParams,
+        q: SelectConditionStep<Record>
+    ) = params.department?.let {
+        q.and(employeeTable.department.eq(it.name))
+    } ?: q
 
 }
