@@ -22,8 +22,8 @@ class ResponseDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `insertResponse should be successful`() {
-        val responseFeedback = ResponseFeedback(15L, "HI")
-        val isInsert = dao.insertResponse(responseFeedback,companyId)
+        val feedbackResponse = FeedbackResponse(15L, "HI")
+        val isInsert = dao.insertResponse(feedbackResponse,companyId)
         assert(isInsert)
 
     }

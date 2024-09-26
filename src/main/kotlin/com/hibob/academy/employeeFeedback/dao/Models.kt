@@ -39,7 +39,7 @@ data class ResponseFeedbackData(
     val data: LocalDate,
 )
 
-data class ResponseFeedback(
+data class FeedbackResponse(
     val feedbackId: Long,
     val response: String
 )
