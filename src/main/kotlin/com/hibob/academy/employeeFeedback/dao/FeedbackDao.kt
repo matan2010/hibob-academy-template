@@ -41,14 +41,7 @@ class FeedbackDao(private val sql: DSLContext) {
 
 
     fun getFeedbackByParams(companyId: Long, params: FeedbackQueryParams): List<FeedbackData> {
-        val query = sql.select(
-            feedbackTable.id,
-            feedbackTable.feedback,
-            feedbackTable.employeeId,
-            feedbackTable.companyId,
-            feedbackTable.date,
-            feedbackTable.status
-        )
+        val query = sql.select()
             .from(feedbackTable)
             .leftJoin(employeeTable).on(feedbackTable.employeeId.eq(employeeTable.id))
             .where(feedbackTable.companyId.eq(companyId))
