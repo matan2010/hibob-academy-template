@@ -4,20 +4,25 @@ import com.hibob.academy.utils.BobDbTest
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
 
 @BobDbTest
 class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
-    private val companyId: Long = 8L
-    private val table = FeedbackTable.instance
-    private val dao = FeedbackDao(sql)
+    private val companyId: Long = -8L
+    private val feedbackTable = FeedbackTable.instance
+    private val employeeTable = EmployeeTable.instance
+    private val feedbackDao = FeedbackDao(sql)
+    private val employeeDao = EmployeeDao(sql)
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).execute()
+        sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
+        sql.deleteFrom(employeeTable).where(employeeTable.companyId.eq(companyId)).execute()
     }
 
     @Test
@@ -26,9 +31,9 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
             Feedback("Hi", 5L),
             Feedback("By", null)
         )
-        dao.insertFeedback(listFeedback[0], companyId)
-        dao.insertFeedback(listFeedback[1], companyId)
-        val allFeedback = dao.viewAllFeedback(companyId)
+        feedbackDao.insertFeedback(listFeedback[0], companyId)
+        feedbackDao.insertFeedback(listFeedback[1], companyId)
+        val allFeedback = feedbackDao.viewAllFeedback(companyId)
         assertEquals(listFeedback.size, allFeedback.size)
 
         for (i in listFeedback.indices) {
@@ -40,7 +45,66 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `insertFeedback should be successful`() {
         val feedback = Feedback("Hi", 5L)
-        val isInsert = dao.insertFeedback(feedback, companyId)
+        val isInsert = feedbackDao.insertFeedback(feedback, companyId)
         assert(isInsert)
     }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by date`() {
+        val feedback = Feedback("Hi", 5L)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), null, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by date and employee id null`() {
+        val feedback = Feedback("Hi", null)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), null, true)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by null Employee Id`() {
+        val feedback = Feedback("Hi", null)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(null, null, true)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by department`() {
+        val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
+        employeeDao.insertEmployee(newEmployee1)
+        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        assertNotNull(employee)
+        val feedback = Feedback("Hi", employee?.id)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(null, Department.UX, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
+    @Test
+    fun `FeedbackQueryParams should return feedback by department and date`() {
+        val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
+        employeeDao.insertEmployee(newEmployee1)
+        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        assertNotNull(employee)
+        val feedback = Feedback("Hi", employee?.id)
+        feedbackDao.insertFeedback(feedback, companyId)
+        val feedbackQueryParams = FeedbackQueryParams(LocalDate.now(), Department.UX, false)
+        val listFeedback = feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
+        assertEquals(feedback.feedback, listFeedback[0].feedback)
+        assertEquals(feedback.employeeId, listFeedback[0].employeeId)
+    }
+
 }

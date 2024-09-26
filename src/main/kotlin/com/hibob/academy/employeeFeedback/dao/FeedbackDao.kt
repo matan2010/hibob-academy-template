@@ -9,7 +9,7 @@ import java.time.LocalDate
 @Component
 class FeedbackDao(private val sql: DSLContext) {
     private val feedbackTable = FeedbackTable.instance
-
+    private val employeeTable = EmployeeTable.instance
     private val feedbackMapper = RecordMapper<Record, FeedbackData> { record ->
         FeedbackData(
             record[feedbackTable.id],
@@ -36,6 +36,36 @@ class FeedbackDao(private val sql: DSLContext) {
             .set(feedbackTable.date, LocalDate.now())
             .set(feedbackTable.status, FeedbackStatus.UNREVIEWED.toDatabaseValue())
             .execute() > 0
+    }
+
+
+
+    fun getFeedbackByParams(companyId: Long, params: FeedbackQueryParams): List<FeedbackData> {
+        val query = sql.select(
+            feedbackTable.id,
+            feedbackTable.feedback,
+            feedbackTable.employeeId,
+            feedbackTable.companyId,
+            feedbackTable.date,
+            feedbackTable.status
+        )
+            .from(feedbackTable)
+            .leftJoin(employeeTable).on(feedbackTable.employeeId.eq(employeeTable.id))
+            .where(feedbackTable.companyId.eq(companyId))
+
+        params.department?.let {
+            query.and(employeeTable.department.eq(it.name))
+                .and(feedbackTable.employeeId.eq(employeeTable.id))
+        }
+
+        if (params.nullEmployeeId)
+            query.and(feedbackTable.employeeId.isNull)
+
+        params.date?.let {
+            query.and(feedbackTable.date.eq(params.date))
+        }
+
+        return query.fetch(feedbackMapper)
     }
 
 }
