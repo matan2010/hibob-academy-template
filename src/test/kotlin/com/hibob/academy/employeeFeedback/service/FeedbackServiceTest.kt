@@ -2,13 +2,15 @@ package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.Feedback
 import com.hibob.academy.employeeFeedback.dao.FeedbackDao
+import com.hibob.academy.employeeFeedback.dao.FeedbackStatus
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
+import kotlin.random.Random
 
 class FeedbackServiceTest {
     private val feedbackDaoMock = mock<FeedbackDao> {}
     private val feedbackService = FeedbackService(feedbackDaoMock)
-    private val companyId: Long = 8L
+    private val companyId: Long = Random.nextLong()
 
 
     @Test
@@ -24,6 +26,26 @@ class FeedbackServiceTest {
         whenever(feedbackDaoMock.insertFeedback(feedback,companyId)).thenReturn(true)
         feedbackService.insertFeedback(feedback,companyId)
         verify(feedbackDaoMock).insertFeedback(feedback,companyId)
+    }
+
+    @Test
+    fun `updateFeedbackStatus should be successful`() {
+        whenever(feedbackDaoMock.updateFeedbackStatus(3L,companyId,FeedbackStatus.UNREVIEWED)).thenReturn(true)
+        feedbackService.updateFeedbackStatus(3L,companyId,FeedbackStatus.REVIEWED)
+        verify(feedbackDaoMock).updateFeedbackStatus(3L,companyId,FeedbackStatus.REVIEWED)
+    }
+
+    @Test
+    fun `checkFeedbackStatus should be successful`() {
+        whenever(feedbackDaoMock.checkFeedbackStatus(3L,companyId,companyId)).thenReturn(String.toString())
+        feedbackService.checkFeedbackStatus(3L,companyId,companyId)
+        verify(feedbackDaoMock).checkFeedbackStatus(3L,companyId,companyId)
+    }
+
+
+    @Test
+    fun `getFeedbackByParams should be successful`() {
+        //TODO
     }
 
 
