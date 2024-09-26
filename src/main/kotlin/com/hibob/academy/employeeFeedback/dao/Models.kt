@@ -14,9 +14,6 @@ data class FeedbackData(
 data class Feedback(
     val feedback: String,
     val employeeId: Long?,
-    val companyId: Long,
-    val data: LocalDate,
-    val status: FeedbackStatus
 )
 
 data class EmployeeData(
@@ -42,6 +39,14 @@ data class FeedbackResponseData(
 data class FeedbackResponse(
     val feedbackId: Long,
     val response: String
+  )
+
+data class NewEmployee(
+    val firstName: String,
+    val lastName: String,
+    val role: Role,
+    val companyId: Long,
+    val department: Department
 )
 
 enum class Department {

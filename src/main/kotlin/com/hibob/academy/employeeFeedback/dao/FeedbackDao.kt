@@ -4,6 +4,7 @@ import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class FeedbackDao(private val sql: DSLContext) {
@@ -27,13 +28,13 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetch(feedbackMapper)
     }
 
-    fun insertFeedback(feedback: Feedback): Boolean {
+    fun insertFeedback(feedback: Feedback,companyId: Long): Boolean {
         return sql.insertInto(feedbackTable)
             .set(feedbackTable.feedback, feedback.feedback)
             .set(feedbackTable.employeeId, feedback.employeeId)
-            .set(feedbackTable.companyId, feedback.companyId)
-            .set(feedbackTable.date, feedback.data)
-            .set(feedbackTable.status, feedback.status.toDatabaseValue())
+            .set(feedbackTable.companyId, companyId)
+            .set(feedbackTable.date, LocalDate.now())
+            .set(feedbackTable.status, FeedbackStatus.UNREVIEWED.toDatabaseValue())
             .execute() > 0
     }
 

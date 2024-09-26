@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.LocalDate
 
 @BobDbTest
 class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
@@ -24,27 +23,24 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `viewAllFeedback should be successful`() {
         val listFeedback = listOf(
-            Feedback("Hi", 5L, companyId, LocalDate.now(), FeedbackStatus.UNREVIEWED),
-            Feedback("By", null, companyId, LocalDate.now(), FeedbackStatus.UNREVIEWED)
+            Feedback("Hi", 5L),
+            Feedback("By", null)
         )
-        dao.insertFeedback(listFeedback[0])
-        dao.insertFeedback(listFeedback[1])
+        dao.insertFeedback(listFeedback[0], companyId)
+        dao.insertFeedback(listFeedback[1], companyId)
         val allFeedback = dao.viewAllFeedback(companyId)
         assertEquals(listFeedback.size, allFeedback.size)
 
         for (i in listFeedback.indices) {
             assertEquals(listFeedback[i].feedback, allFeedback[i].feedback)
             assertEquals(listFeedback[i].employeeId, allFeedback[i].employeeId)
-            assertEquals(listFeedback[i].companyId, allFeedback[i].companyId)
-            assertEquals(listFeedback[i].data, allFeedback[i].data)
-            assertEquals(listFeedback[i].status, allFeedback[i].status)
         }
     }
 
     @Test
     fun `insertFeedback should be successful`() {
-        val feedback = Feedback("Hi", 5L, companyId, LocalDate.now(), FeedbackStatus.UNREVIEWED)
-        val isInsert = dao.insertFeedback(feedback)
+        val feedback = Feedback("Hi", 5L)
+        val isInsert = dao.insertFeedback(feedback, companyId)
         assert(isInsert)
     }
 }
