@@ -26,4 +26,15 @@ class EmployeeDao(private val sql: DSLContext) {
         .and(employeeTable.companyId.eq(employee.companyId))
         .fetchOne(employeeMapper)
     }
+
+    fun insertEmployee(newEmployee: NewEmployee): Int {
+        return sql.insertInto(employeeTable)
+            .set(employeeTable.firstName, newEmployee.firstName)
+            .set(employeeTable.lastName, newEmployee.lastName)
+            .set(employeeTable.role, newEmployee.role.name)
+            .set(employeeTable.companyId, newEmployee.companyId)
+            .set(employeeTable.department, newEmployee.department.name)
+            .execute()
+    }
+
 }
