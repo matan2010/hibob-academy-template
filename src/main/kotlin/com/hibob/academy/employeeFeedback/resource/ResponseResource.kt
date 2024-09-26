@@ -27,7 +27,7 @@ class ResponseResource (private val responseService: ResponseService) {
             ?: return Response.status(Response.Status.UNAUTHORIZED).build()
         val employeeId = employeeData.id
         val role = employeeData.role
-        if (role == Role.HR) {
+        if (role != Role.HR) {
             throw NotAuthorizedException("You do not have permission to insert Response.")
         }
         return Response.ok(responseService.insertResponse(feedbackResponse,employeeId)).build()
