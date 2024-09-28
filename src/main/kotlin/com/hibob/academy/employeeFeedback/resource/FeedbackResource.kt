@@ -11,12 +11,12 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/employee")
+@Path("/api/employee/feedback")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class FeedbackResource(private val feedbackService: FeedbackService) : BaseResource() {
 
-    @Path("/feedback/view")
+    @Path("/view")
     @GET
     fun viewAllFeedback(
         @Context requestContext: ContainerRequestContext
@@ -28,7 +28,6 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.viewAllFeedback(companyId)).build()
     }
 
-    @Path("/feedback")
     @POST
     fun insertFeedback(
         feedback: Feedback,
@@ -41,20 +40,27 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.insertFeedback(feedback, companyId)).build()
     }
 
-    @Path("/feedback/status")
+    @Path("/status")
     @POST
     fun updateFeedbackStatus(
-        feedbackId: Long,
-        feedbackStatus: FeedbackStatus,
+        feedbackInfo: FeedbackInfo,
         @Context requestContext: ContainerRequestContext
     ): Response {
         val employeeData = getEmployeeData(requestContext)
         checkHR(employeeData)
         val companyId = employeeData.companyId
-        return Response.ok(feedbackService.updateFeedbackStatus(feedbackId, companyId, feedbackStatus)).build()
+        val feedbackId = feedbackInfo.feedbackId
+        val feedbackStatus = FeedbackStatus.fromDatabaseValue(feedbackInfo.feedbackStatus)
+        return Response.ok(
+            feedbackService.updateFeedbackStatus(
+                feedbackId,
+                companyId,
+                feedbackStatus
+            )
+        ).build()
     }
 
-    @Path("/feedback/status/{feedbackId}")
+    @Path("/status/{feedbackId}")
     @GET
     fun checkFeedbackStatus(
         @PathParam("feedbackId") feedbackId: Long,
@@ -63,10 +69,12 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         val employeeData = getEmployeeData(requestContext)
         val companyId = employeeData.companyId
         val employeeId = employeeData.id
+        val x = feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)
         return Response.ok(feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)).build()
     }
 
-    @Path("/feedback/search")
+
+    @Path("/search")
     @POST
     fun getFeedbackByParams(
         feedbackQueryParams: FeedbackQueryParams,

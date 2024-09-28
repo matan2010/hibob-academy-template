@@ -16,6 +16,11 @@ data class Feedback(
     val employeeId: Long?,
 )
 
+data class FeedbackInfo(
+    val feedbackId: Long,
+    val feedbackStatus: String
+)
+
 data class EmployeeData(
     val id: Long,
     val role: Role,
