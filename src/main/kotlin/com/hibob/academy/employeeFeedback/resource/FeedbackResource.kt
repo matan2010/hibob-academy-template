@@ -2,6 +2,7 @@ package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.EmployeeData
 import com.hibob.academy.employeeFeedback.dao.Feedback
+import com.hibob.academy.employeeFeedback.dao.FeedbackStatus
 import com.hibob.academy.employeeFeedback.dao.Role
 import com.hibob.academy.employeeFeedback.service.FeedbackService
 import com.hibob.academy.filters.AuthenticationFilter
@@ -42,6 +43,38 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
         val companyId = employeeData.companyId
         return Response.ok(feedbackService.insertFeedback(feedback,companyId)).build()
     }
+
+
+    @Path("/feedback/status")
+    @POST
+    fun updateFeedbackStatus(
+        feedbackId: Long,
+        feedbackStatus: FeedbackStatus,
+        @Context requestContext: ContainerRequestContext
+    ): Response {
+        val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
+            ?: return Response.status(Response.Status.UNAUTHORIZED).build()
+        val role = employeeData.role
+        if (role != Role.HR) {
+            throw NotAuthorizedException("You do not have permission to update feedback status.")
+        }
+        return Response.ok(feedbackService.updateFeedbackStatus(feedbackId, employeeData.companyId, feedbackStatus)).build()
+    }
+
+
+    @Path("/feedback/status/{feedbackId}")
+    @GET
+    fun checkFeedbackStatus(
+        @PathParam("feedbackId") feedbackId: Long,
+        @Context requestContext: ContainerRequestContext): Response {
+        val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
+            ?: return Response.status(Response.Status.UNAUTHORIZED).build()
+        val employeeId = employeeData.companyId
+        val companyId= employeeData.companyId
+        return Response.ok(feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)).build()
+
+    }
+
 
 }
 
