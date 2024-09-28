@@ -34,14 +34,14 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
 
     @Path("/feedback")
     @POST
-    fun insertFeedback(feedback: Feedback,@Context requestContext: ContainerRequestContext): Response {
+    fun insertFeedback(feedback: Feedback, @Context requestContext: ContainerRequestContext): Response {
         if (feedback.feedback.length < 10) {
             throw BadRequestException("The feedback is too short.")
         }
         val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
             ?: return Response.status(Response.Status.UNAUTHORIZED).build()
         val companyId = employeeData.companyId
-        return Response.ok(feedbackService.insertFeedback(feedback,companyId)).build()
+        return Response.ok(feedbackService.insertFeedback(feedback, companyId)).build()
     }
 
 
@@ -58,7 +58,8 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
         if (role != Role.HR) {
             throw NotAuthorizedException("You do not have permission to update feedback status.")
         }
-        return Response.ok(feedbackService.updateFeedbackStatus(feedbackId, employeeData.companyId, feedbackStatus)).build()
+        val companyId = employeeData.companyId
+        return Response.ok(feedbackService.updateFeedbackStatus(feedbackId, companyId, feedbackStatus)).build()
     }
 
 
@@ -66,13 +67,13 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
     @GET
     fun checkFeedbackStatus(
         @PathParam("feedbackId") feedbackId: Long,
-        @Context requestContext: ContainerRequestContext): Response {
+        @Context requestContext: ContainerRequestContext
+    ): Response {
         val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
             ?: return Response.status(Response.Status.UNAUTHORIZED).build()
         val employeeId = employeeData.companyId
-        val companyId= employeeData.companyId
+        val companyId = employeeData.companyId
         return Response.ok(feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)).build()
-
     }
 
 
