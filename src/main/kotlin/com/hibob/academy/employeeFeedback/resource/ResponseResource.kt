@@ -14,22 +14,20 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/employee")
+@Path("/api/employee/response")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-class ResponseResource (private val responseService: ResponseService) {
+class ResponseResource(private val responseService: ResponseService) : BaseResource() {
 
-
-    @Path("/response")
     @POST
-    fun insertResponse(feedbackResponse: FeedbackResponse, @Context requestContext: ContainerRequestContext): Response {
-        val employeeData = requestContext.getProperty(AuthenticationFilter.EMPLOYEE) as EmployeeData?
-            ?: return Response.status(Response.Status.UNAUTHORIZED).build()
+    fun insertResponse(
+        feedbackResponse: FeedbackResponse,
+        @Context requestContext: ContainerRequestContext
+    ):
+            Response {
+        val employeeData = getEmployeeData(requestContext)
+        checkHR(employeeData)
         val employeeId = employeeData.id
-        val role = employeeData.role
-        if (role != Role.HR) {
-            throw NotAuthorizedException("You do not have permission to insert Response.")
-        }
-        return Response.ok(responseService.insertResponse(feedbackResponse,employeeId)).build()
+        return Response.ok(responseService.insertResponse(feedbackResponse, employeeId)).build()
     }
 }

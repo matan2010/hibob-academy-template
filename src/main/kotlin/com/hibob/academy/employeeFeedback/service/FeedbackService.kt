@@ -1,9 +1,6 @@
 package com.hibob.academy.employeeFeedback.service
 
-import com.hibob.academy.employeeFeedback.dao.Feedback
-import com.hibob.academy.employeeFeedback.dao.FeedbackDao
-import com.hibob.academy.employeeFeedback.dao.FeedbackData
-import com.hibob.academy.employeeFeedback.dao.FeedbackStatus
+import com.hibob.academy.employeeFeedback.dao.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -24,6 +21,10 @@ class FeedbackService @Autowired constructor(private val feedbackDao: FeedbackDa
 
     fun checkFeedbackStatus(feedbackId: Long, employeeId: Long, companyId: Long): String? {
         return feedbackDao.checkFeedbackStatus(feedbackId, employeeId, companyId)
+    }
+
+    fun getFeedbackByParams(companyId: Long, feedbackQueryParams: FeedbackQueryParams): List<FeedbackData> {
+        return feedbackDao.getFeedbackByParams(companyId, feedbackQueryParams)
     }
 
 }
