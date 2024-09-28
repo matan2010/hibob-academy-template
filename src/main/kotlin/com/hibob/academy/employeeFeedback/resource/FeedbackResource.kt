@@ -69,7 +69,6 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         val employeeData = getEmployeeData(requestContext)
         val companyId = employeeData.companyId
         val employeeId = employeeData.id
-        val x = feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)
         return Response.ok(feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)).build()
     }
 

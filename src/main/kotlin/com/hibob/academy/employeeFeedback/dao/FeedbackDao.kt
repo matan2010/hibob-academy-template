@@ -91,7 +91,7 @@ class FeedbackDao(private val sql: DSLContext) {
         params: FeedbackQueryParams,
         q: SelectConditionStep<Record>
     ) = params.department?.let {
-        q.and(employeeTable.department.eq(it.name))
+        q.and(employeeTable.department.eq(it.name.lowercase()))
     } ?: q
 
 
