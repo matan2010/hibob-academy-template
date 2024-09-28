@@ -41,6 +41,13 @@ data class FeedbackResponse(
     val response: String
   )
 
+data class FeedbackQueryParams(
+    val date: LocalDate? = null,
+    val department: Department? = null,
+    val nullEmployeeId: Boolean
+)
+
+
 data class NewEmployee(
     val firstName: String,
     val lastName: String,
