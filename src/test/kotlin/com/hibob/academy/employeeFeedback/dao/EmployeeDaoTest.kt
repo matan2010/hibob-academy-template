@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.random.Random
 
 @BobDbTest
 class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val dao = EmployeeDao(sql)
     private val employee = EmployeeTable.instance
-    private val companyId: Long = -1
+    private val companyId: Long = Random.nextLong()
+
     @BeforeEach
     @AfterEach
     fun cleanup() {

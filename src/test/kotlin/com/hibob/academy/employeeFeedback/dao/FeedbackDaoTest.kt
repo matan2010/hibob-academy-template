@@ -9,10 +9,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
+import kotlin.random.Random
 
 @BobDbTest
 class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
-    private val companyId: Long = -8L
+    private val companyId: Long = Random.nextLong()
     private val feedbackTable = FeedbackTable.instance
     private val employeeTable = EmployeeTable.instance
     private val feedbackDao = FeedbackDao(sql)
@@ -83,7 +84,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `FeedbackQueryParams should return feedback by department`() {
         val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
         employeeDao.insertEmployee(newEmployee1)
-        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        val employee =
+            employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName, newEmployee1.companyId))
         assertNotNull(employee)
         val feedback = Feedback("Hi", employee?.id)
         feedbackDao.insertFeedback(feedback, companyId)
@@ -97,7 +99,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `FeedbackQueryParams should return feedback by department and date`() {
         val newEmployee1 = NewEmployee("Mat", "Sab", Role.EMPLOYEE, companyId, Department.UX)
         employeeDao.insertEmployee(newEmployee1)
-        val employee = employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName,newEmployee1.companyId))
+        val employee =
+            employeeDao.getEmployee(Employee(newEmployee1.firstName, newEmployee1.lastName, newEmployee1.companyId))
         assertNotNull(employee)
         val feedback = Feedback("Hi", employee?.id)
         feedbackDao.insertFeedback(feedback, companyId)

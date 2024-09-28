@@ -6,10 +6,11 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.random.Random
 
 @BobDbTest
 class ResponseDaoTest @Autowired constructor(private val sql: DSLContext) {
-    private val companyId: Long = 8L
+    private val companyId: Long = Random.nextLong()
     private val table = ResponseTable.instance
     private val dao = ResponseDao(sql)
 
@@ -23,7 +24,7 @@ class ResponseDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `insertResponse should be successful`() {
         val feedbackResponse = FeedbackResponse(15L, "HI")
-        val isInsert = dao.insertResponse(feedbackResponse,companyId)
+        val isInsert = dao.insertResponse(feedbackResponse, companyId)
         assert(isInsert)
 
     }
