@@ -14,11 +14,12 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/employee/response")
+@Path("/api/employee")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class ResponseResource(private val responseService: ResponseService) : BaseResource() {
 
+    @Path("/response")
     @POST
     fun insertResponse(
         feedbackResponse: FeedbackResponse,

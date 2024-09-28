@@ -11,12 +11,12 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 
 @Controller
-@Path("/api/employee/feedback")
+@Path("/api/employee")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class FeedbackResource(private val feedbackService: FeedbackService) : BaseResource() {
 
-    @Path("/view")
+    @Path("/feedback/view")
     @GET
     fun viewAllFeedback(
         @Context requestContext: ContainerRequestContext
@@ -28,6 +28,7 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.viewAllFeedback(companyId)).build()
     }
 
+    @Path("/feedback")
     @POST
     fun insertFeedback(
         feedback: Feedback,
@@ -40,7 +41,7 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.insertFeedback(feedback, companyId)).build()
     }
 
-    @Path("/status")
+    @Path("/feedback/status")
     @POST
     fun updateFeedbackStatus(
         feedbackId: Long,
@@ -53,7 +54,7 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.updateFeedbackStatus(feedbackId, companyId, feedbackStatus)).build()
     }
 
-    @Path("/status/{feedbackId}")
+    @Path("/feedback/status/{feedbackId}")
     @GET
     fun checkFeedbackStatus(
         @PathParam("feedbackId") feedbackId: Long,
@@ -65,7 +66,7 @@ class FeedbackResource(private val feedbackService: FeedbackService) : BaseResou
         return Response.ok(feedbackService.checkFeedbackStatus(feedbackId, employeeId, companyId)).build()
     }
 
-    @Path("/search")
+    @Path("/feedback/search")
     @POST
     fun getFeedbackByParams(
         feedbackQueryParams: FeedbackQueryParams,
