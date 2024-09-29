@@ -15,5 +15,4 @@ class ResponseDao(private val sql: DSLContext) {
             .set(responseTable.date, LocalDate.now())
             .execute() > 0
     }
-
 }

@@ -16,6 +16,11 @@ data class Feedback(
     val employeeId: Long?,
 )
 
+data class FeedbackInfo(
+    val feedbackId: Long,
+    val feedbackStatus: String
+)
+
 data class EmployeeData(
     val id: Long,
     val role: Role,
@@ -29,17 +34,17 @@ data class Employee(
     val companyId: Long
 )
 
-data class FeedbackResponseData(
-    val feedbackId: Long,
-    val response: String,
-    val employeeId: Long,
-    val data: LocalDate,
-)
-
 data class FeedbackResponse(
     val feedbackId: Long,
     val response: String
   )
+
+data class FeedbackQueryParams(
+    val date: LocalDate? = null,
+    val department: Department? = null,
+    val nullEmployeeId: Boolean
+)
+
 
 data class NewEmployee(
     val firstName: String,
@@ -55,10 +60,6 @@ enum class Department {
     DATA_ANALYTICS,
     UX;
 
-    fun toDatabaseValue(): String {
-        return this.name.lowercase()
-    }
-
     companion object {
         fun fromDatabaseValue(value: String): Department {
             return valueOf(value.uppercase())
@@ -72,17 +73,12 @@ enum class Role {
     MANAGER,
     EMPLOYEE;
 
-    fun toDatabaseValue(): String {
-        return this.name.lowercase()
-    }
-
     companion object {
         fun fromDatabaseValue(value: String): Role {
             return valueOf(value.uppercase())
         }
     }
 }
-
 
 enum class FeedbackStatus {
     REVIEWED,
